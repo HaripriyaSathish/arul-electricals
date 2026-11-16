@@ -29,9 +29,17 @@ class Database
             ];
             if ($c['driver'] === 'pgsql') {
                 $dsn = "pgsql:host={$c['host']};port={$c['port']};dbname={$c['name']};sslmode={$c['sslmode']}";
-                if (!empty($c['options'])) $dsn .= ";options={$c['options']}";
                 // Neon's connection pooler works best with client-side prepared statements
                 $opts[PDO::ATTR_EMULATE_PREPARES] = true;
+                try {
+                    // Modern libpq (Render/Docker) identifies the Neon endpoint automatically (SNI)
+                    self::$pdo = new PDO($dsn, $c['user'], $c['pass'], $opts);
+                } catch (PDOException $e) {
+                    // Older libpq (e.g. XAMPP on Windows) has no SNI → Neon asks for the endpoint id explicitly
+                    if (empty($c['options']) || stripos($e->getMessage(), 'Endpoint ID') === false) throw $e;
+                    self::$pdo = new PDO($dsn . ";options={$c['options']}", $c['user'], $c['pass'], $opts);
+                }
+                return self::$pdo;
             } else {
                 $dsn = "mysql:host={$c['host']};port={$c['port']};dbname={$c['name']};charset={$c['charset']}";
                 $opts[PDO::ATTR_EMULATE_PREPARES] = false;

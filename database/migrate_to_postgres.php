@@ -33,10 +33,15 @@ say("Source: MySQL {$my['name']} @ {$my['host']}");
 putenv('DATABASE_URL=' . $target);
 $_ENV['DATABASE_URL'] = $target;
 $pg = require __DIR__ . '/../backend/config/database.php';
-$dsn = "pgsql:host={$pg['host']};port={$pg['port']};dbname={$pg['name']};sslmode={$pg['sslmode']}" . ($pg['options'] ? ";options={$pg['options']}" : '');
-$dst = new PDO($dsn, $pg['user'], $pg['pass'], [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, PDO::ATTR_EMULATE_PREPARES => true,
-]);
+$dsn = "pgsql:host={$pg['host']};port={$pg['port']};dbname={$pg['name']};sslmode={$pg['sslmode']}";
+$pgOpts = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, PDO::ATTR_EMULATE_PREPARES => true];
+try {
+    $dst = new PDO($dsn, $pg['user'], $pg['pass'], $pgOpts);
+} catch (PDOException $e) {
+    // older libpq without SNI: Neon needs the endpoint id passed explicitly
+    if (!$pg['options'] || stripos($e->getMessage(), 'Endpoint ID') === false) throw $e;
+    $dst = new PDO($dsn . ";options={$pg['options']}", $pg['user'], $pg['pass'], $pgOpts);
+}
 say("Target: PostgreSQL {$pg['name']} @ {$pg['host']}");
 
 // ---------- schema ----------
