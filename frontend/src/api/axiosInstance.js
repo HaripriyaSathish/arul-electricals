@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-export const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:8000').replace(/\/$/, '')
+// Local dev: http://localhost:8000 (frontend/.env). Production build: "" = same domain (frontend/.env.production).
+export const API_URL = (import.meta.env.VITE_API_URL ?? 'http://localhost:8000').replace(/\/$/, '')
 const TOKEN_KEY = 'ae_admin_token'
 
 export const getToken = () => {

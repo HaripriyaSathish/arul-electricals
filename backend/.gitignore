@@ -1,0 +1,8 @@
+# Secrets — never commit
+.env
+
+# Runtime files
+logs/*
+!logs/.gitkeep
+uploads/media/*
+!uploads/media/.gitkeep

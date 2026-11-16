@@ -1,0 +1,9 @@
+.git
+**/node_modules
+frontend/dist
+backend/.env
+backend/logs/*.log
+backend/uploads/media/*
+database/seed_images
+design
+*.md
