@@ -7,7 +7,10 @@
  *
  * If DATABASE_URL is set it always wins.
  */
-$url = env('DATABASE_URL', getenv('DATABASE_URL') ?: '');
+$url = trim((string) env('DATABASE_URL', getenv('DATABASE_URL') ?: ''));
+// Accept values copied as  psql 'postgresql://...'  or wrapped in quotes
+$url = preg_replace('/^psql\s+/i', '', $url);
+$url = trim($url, " \t\n\r\"'");
 
 if ($url) {
     $u = parse_url($url);

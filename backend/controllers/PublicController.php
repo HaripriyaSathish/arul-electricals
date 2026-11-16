@@ -30,9 +30,27 @@ class PublicController
         Response::ok(['settings' => $settings, 'sections' => $sections, 'lists' => $lists, 'media_alt' => $alt]);
     }
 
+    /** Health check (Render) — on failure it explains why, without revealing the password. */
     public function health(): void
     {
-        Database::value('SELECT 1');
-        Response::ok(['status' => 'ok', 'time' => date('c')]);
+        $c = Database::config();
+        $info = [
+            'driver'           => $c['driver'],
+            'database_url_set' => (bool) env('DATABASE_URL'),
+            'host'             => $c['host'],
+            'database'         => $c['name'],
+        ];
+        try {
+            Database::value('SELECT 1');
+            $info['tables'] = (int) Database::value('SELECT COUNT(*) FROM sections');
+            Response::ok(['status' => 'ok', 'time' => date('c')] + $info);
+        } catch (Throwable $e) {
+            $msg = $e->getMessage();
+            if (!empty($c['pass'])) $msg = str_replace($c['pass'], '***', $msg);
+            $hint = $c['driver'] === 'mysql'
+                ? 'DATABASE_URL is not set on this server, so it tried MySQL. Add DATABASE_URL (your Neon connection string) in Render → Environment.'
+                : 'Check that DATABASE_URL is exactly the Neon connection string (postgresql://...), with the correct password.';
+            Response::json(['success' => false, 'message' => 'Database connection failed', 'hint' => $hint, 'error' => $msg] + $info, 500);
+        }
     }
 }
