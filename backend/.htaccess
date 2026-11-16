@@ -1,0 +1,13 @@
+# Apache (XAMPP / shared hosting): send every request that is not a real file to index.php
+Options -Indexes
+RewriteEngine On
+
+# Keep the Authorization header (needed for admin login tokens)
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Never serve secrets / internals directly
+RewriteRule ^(\.env|config|core|controllers|middleware|helpers|routes|logs)(/|$) - [F,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [QSA,L]

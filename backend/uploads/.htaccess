@@ -1,0 +1,10 @@
+# Media files: cache in the browser for 30 days, never execute scripts here
+<IfModule mod_headers.c>
+  <FilesMatch "\.(webp|png|jpe?g|gif)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+</IfModule>
+<FilesMatch "\.(php|phtml|phar|pl|py|cgi|sh)$">
+  Require all denied
+</FilesMatch>
+Options -Indexes
