@@ -703,3 +703,15 @@ button { font-family: inherit; }
     radial-gradient(ellipse 55% 50% at 50% 48%, rgba(40, 0, 80, .34), rgba(40, 0, 80, .08) 70%, transparent 100%),
     linear-gradient(180deg, rgba(89, 0, 168, .30) 0%, rgba(110, 40, 190, .16) 50%, rgba(60, 0, 120, .38) 100%);
 }
+
+/* ================= Testimonials: purple hover border ================= */
+.testi { border: 2px solid var(--border); }
+.testi:hover {
+  border-color: var(--violet);
+  transform: translateY(-10px);
+  box-shadow: 0 0 0 4px rgba(89, 0, 168, .12), 0 28px 50px -22px rgba(89, 0, 168, .55);
+}
+.testi::before { background: linear-gradient(90deg, var(--violet), #8a3be0); }
+.testi:hover figcaption b { color: var(--violet); }
+.testi:hover .testi__avatar { background: var(--yellow); color: var(--violet-d); }
+.testi__avatar { transition: background .3s, color .3s; }
