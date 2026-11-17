@@ -1,5 +1,5 @@
 import Icon from '../common/Icon'
-import { ZoomImg, highlight, linkProps } from '../common/SiteBits'
+import { ZoomImg, linkProps, rich } from '../common/SiteBits'
 
 export default function About({ data: d, siteName }) {
   return (
@@ -29,14 +29,14 @@ export default function About({ data: d, siteName }) {
           <h2 className="reveal">{d.title}</h2>
           {/* an empty line in the admin text starts a new paragraph */}
           {String(d.description || '').split(/\n\s*\n/).map((para) => para.trim()).filter(Boolean).map((para, i) => (
-            <p key={i} className="about__lead reveal">{highlight(para, siteName)}</p>
+            <p key={i} className="about__lead reveal">{rich(para, siteName)}</p>
           ))}
           {d.points?.length > 0 && (
             <ul className="about__points">
               {d.points.filter((p) => p.title || p.text).map((p, i) => (
                 <li key={i} className="reveal" style={{ transitionDelay: `${i * 80}ms` }}>
                   <Icon name="check-circle" size={22} />
-                  <div><b>{p.title}</b>{p.text && <p>{p.text}</p>}</div>
+                  <div><b>{p.title}</b>{p.text && <p>{rich(p.text)}</p>}</div>
                 </li>
               ))}
             </ul>

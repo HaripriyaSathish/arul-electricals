@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import Icon from '../common/Icon'
-import { SectionHead, ZoomImg, useReveal } from '../common/SiteBits'
+import { SectionHead, ZoomImg, useReveal, rich } from '../common/SiteBits'
 
 export default function Projects({ data: d, items, onEnquire }) {
   const [filter, setFilter] = useState('all')
@@ -31,7 +31,7 @@ export default function Projects({ data: d, items, onEnquire }) {
               <div className="proj-card__body">
                 {p.client && <span className="proj-card__client">{p.client}</span>}
                 <h3>{p.title}</h3>
-                {p.description && <p>{p.description}</p>}
+                {p.description && <p>{rich(p.description)}</p>}
                 {p.link_text && (
                   <button type="button" className="proj-card__link" onClick={() => onEnquire(p.title)}>{p.link_text}<Icon name="arrow-right" size={15} /></button>
                 )}

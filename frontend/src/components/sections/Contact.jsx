@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Icon from '../common/Icon'
+import { rich } from '../common/SiteBits'
 import { PublicAPI } from '../../api/endpoints'
 import { errorMessage, fieldErrors } from '../../api/axiosInstance'
 import { telHref } from '../../utils/helpers'
@@ -92,7 +93,7 @@ export default function Contact({ data: d, settings: s, preset }) {
         <div className="contact__info">
           {d.eyebrow && <span className="eyebrow reveal">{d.eyebrow}</span>}
           <h2 className="reveal">{d.title}</h2>
-          {d.subtitle && <p className="contact__sub reveal">{d.subtitle}</p>}
+          {d.subtitle && <p className="contact__sub reveal">{rich(d.subtitle)}</p>}
 
           <div className="contact__cards">
             {info.map((c) => (

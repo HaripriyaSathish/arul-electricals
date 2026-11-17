@@ -795,3 +795,7 @@ button { font-family: inherit; }
   .hero__actions .btn { height: 40px; font-size: 14px; }
   .hero__chips { margin-top: 12px; }
 }
+
+/* **bold** words typed in the admin (keywords bolded in the SEO document) */
+.rt-b { font-weight: 700; color: inherit; }
+.about__lead + .about__lead { margin-top: 14px; }

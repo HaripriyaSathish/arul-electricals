@@ -1,5 +1,5 @@
 import Icon from '../common/Icon'
-import { ZoomImg, linkProps } from '../common/SiteBits'
+import { ZoomImg, linkProps, rich } from '../common/SiteBits'
 
 export default function PanelFeature({ data: d }) {
   return (
@@ -12,7 +12,7 @@ export default function PanelFeature({ data: d }) {
         <div className="feature__content reveal-group--right">
           {d.eyebrow && <span className="eyebrow reveal">{d.eyebrow}</span>}
           <h2 className="reveal">{d.title}</h2>
-          {d.description && <p className="reveal">{d.description}</p>}
+          {d.description && <p className="reveal">{rich(d.description)}</p>}
           {d.points?.length > 0 && (
             <ul className="feature__points">
               {d.points.filter(Boolean).map((p, i) => (

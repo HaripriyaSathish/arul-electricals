@@ -9,7 +9,7 @@ export function SectionHead({ eyebrow, title, subtitle, light = false, align = '
     <div className={`s-head s-head--${align} ${light ? 's-head--light' : ''} reveal`}>
       {eyebrow && <span className="eyebrow">{eyebrow}</span>}
       {title && <h2>{title}</h2>}
-      {subtitle && <p>{subtitle}</p>}
+      {subtitle && <p>{rich(subtitle)}</p>}
     </div>
   )
 }
@@ -74,6 +74,20 @@ export function linkProps(href, settings = {}) {
   if (/^https?:/i.test(href)) return { href, target: '_blank', rel: 'noreferrer' }
   return { href }
 }
+
+/**
+ * Text typed in the admin: **double stars** around words make them bold (as in the SEO document).
+ * Optional `word` (e.g. the company name) is highlighted in the plain parts.
+ */
+export function rich(text = '', word = '') {
+  if (!text) return text
+  return String(text).split(/\*\*(.+?)\*\*/g).map((part, i) => (i % 2
+    ? <strong key={i} className="rt-b">{part}</strong>
+    : <span key={i}>{highlight(part, word)}</span>))
+}
+
+/** Plain text without the **bold** markers (for meta tags, structured data, alt text). */
+export const plain = (text = '') => String(text || '').replace(/\*\*(.+?)\*\*/g, '$1')
 
 /** Wraps every occurrence of `word` in a highlight span. */
 export function highlight(text = '', word = '') {

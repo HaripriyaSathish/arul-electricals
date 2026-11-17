@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import Icon from '../common/Icon'
-import { linkProps, altFor } from '../common/SiteBits'
+import { linkProps, altFor, rich } from '../common/SiteBits'
 import { mediaUrl } from '../../utils/helpers'
 
 export default function Hero({ data: d, settings }) {
@@ -49,7 +49,7 @@ export default function Hero({ data: d, settings }) {
       <div className="container hero__content">
         {d.badge && <span className="hero__badge reveal"><i />{d.badge}</span>}
         <h1 className="reveal">{d.title}</h1>
-        {d.subtitle && <p className="hero__sub reveal">{d.subtitle}</p>}
+        {d.subtitle && <p className="hero__sub reveal">{rich(d.subtitle)}</p>}
         <div className="hero__actions reveal">
           {d.primary_text && <a className="btn btn--yellow btn--lg" {...linkProps(d.primary_link, settings)}><Icon name="zap" size={18} />{d.primary_text}</a>}
           {d.secondary_text && <a className="btn btn--glass btn--lg" {...linkProps(d.secondary_link, settings)}>{d.secondary_text}<Icon name="arrow-right" size={18} /></a>}

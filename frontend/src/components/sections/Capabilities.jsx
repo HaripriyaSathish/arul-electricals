@@ -1,5 +1,5 @@
 import Icon from '../common/Icon'
-import { SectionHead, ZoomImg } from '../common/SiteBits'
+import { SectionHead, ZoomImg, rich } from '../common/SiteBits'
 import { pad2 } from '../../utils/helpers'
 
 export default function Capabilities({ data: d, items }) {
@@ -18,7 +18,7 @@ export default function Capabilities({ data: d, items }) {
                   <span className="cap-card__no">{d.card_label || 'Capability'} {pad2(i + 1)}</span>
                 </div>
                 <h3>{c.title}</h3>
-                {c.description && <p>{c.description}</p>}
+                {c.description && <p>{rich(c.description)}</p>}
               </div>
               {c.link_text && <a href="#contact" className="cap-card__foot">{c.link_text}<Icon name="arrow-right" size={15} /></a>}
             </article>

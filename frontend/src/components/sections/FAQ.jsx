@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Icon from '../common/Icon'
-import { linkProps } from '../common/SiteBits'
+import { linkProps, rich } from '../common/SiteBits'
 
 /** Frequently asked questions — edited in Admin → FAQ. Also published to Google as FAQ structured data (see Home.jsx). */
 export default function FAQ({ data: d, settings }) {
@@ -13,7 +13,7 @@ export default function FAQ({ data: d, settings }) {
         <div className="faq__intro reveal">
           {d.eyebrow && <span className="eyebrow">{d.eyebrow}</span>}
           {d.title && <h2>{d.title}</h2>}
-          {d.subtitle && <p>{d.subtitle}</p>}
+          {d.subtitle && <p>{rich(d.subtitle)}</p>}
           {d.button_text && (
             <a className="btn btn--primary" {...linkProps(d.button_link || '#contact', settings)}>{d.button_text}<Icon name="arrow-right" size={17} /></a>
           )}
@@ -31,7 +31,7 @@ export default function FAQ({ data: d, settings }) {
                   </button>
                 </h3>
                 <div className="faq__answer" id={`faq-a-${i}`} role="region" aria-labelledby={`faq-q-${i}`}>
-                  <div><p>{q.answer}</p></div>
+                  <div><p>{rich(q.answer)}</p></div>
                 </div>
               </div>
             )

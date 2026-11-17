@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { PublicAPI } from '../api/endpoints'
 import { errorMessage } from '../api/axiosInstance'
 import { useFavicon } from '../hooks/useFetch'
-import { useReveal, setAltMap } from '../components/common/SiteBits'
+import { useReveal, setAltMap, plain } from '../components/common/SiteBits'
 import { mediaUrl } from '../utils/helpers'
 import Navbar from '../components/common/Navbar'
 import Footer from '../components/common/Footer'
@@ -65,7 +65,7 @@ export default function Home() {
       if (!ld) { ld = document.createElement('script'); ld.type = 'application/ld+json'; ld.id = 'faq-jsonld'; document.head.appendChild(ld) }
       ld.textContent = JSON.stringify({
         '@context': 'https://schema.org', '@type': 'FAQPage',
-        mainEntity: faqs.map((q) => ({ '@type': 'Question', name: q.question, acceptedAnswer: { '@type': 'Answer', text: q.answer } })),
+        mainEntity: faqs.map((q) => ({ '@type': 'Question', name: plain(q.question), acceptedAnswer: { '@type': 'Answer', text: plain(q.answer) } })),
       })
     } else if (ld) ld.remove()
     // honour a #hash in the URL after content loads

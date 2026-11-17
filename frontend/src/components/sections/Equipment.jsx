@@ -1,5 +1,5 @@
 import Icon from '../common/Icon'
-import { SectionHead, ZoomImg } from '../common/SiteBits'
+import { SectionHead, ZoomImg, rich } from '../common/SiteBits'
 
 /** Equipment catalog — cards are edited in Admin → Equipment. */
 export default function Equipment({ data: d, onEnquire }) {
@@ -17,7 +17,7 @@ export default function Equipment({ data: d, onEnquire }) {
               </ZoomImg>
               <div className="svc-card__body">
                 <h3>{it.title}</h3>
-                {it.description && <p>{it.description}</p>}
+                {it.description && <p>{rich(it.description)}</p>}
                 {it.points?.filter(Boolean).length > 0 && (
                   <ul className="equip-card__points">
                     {it.points.filter(Boolean).map((pt, j) => <li key={j}><Icon name="check-circle" size={16} />{pt}</li>)}

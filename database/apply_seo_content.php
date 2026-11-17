@@ -5,7 +5,7 @@
  *   Local MySQL:  php database/apply_seo_content.php
  *   Neon (Render): DATABASE_URL='postgresql://...' php -d extension=pdo_pgsql database/apply_seo_content.php
  *
- *   Only some sections: add --only=legal (comma-separated section keys, e.g. --only=legal,faq).
+ *   Only some parts: add --only=legal,faq (section keys, card tables such as services or why_items, and/or media).
  *
  * Safe to run more than once. It only changes the fields listed below (other admin edits are kept).
  * Contact details (address, phone, email, working hours) are NOT changed — edit them in Admin → Site Settings.
@@ -88,10 +88,10 @@ $sections = [
     'about' => [
         'eyebrow'     => 'About Our Company',
         'title'       => 'Industrial Electrical Contracting Built for Reliability.',
-        'description' => "ARUL ELECTRICAL is a premier A-Grade licensed electrical contractor and electrical engineering company in Chennai, specialising in HT/LT electrical installations, panel board manufacturing, heavy equipment supply and statutory compliance.\n\nAs an electrical contracting company and consultancy, we focus on technically planned industrial electrical systems with uncompromising workmanship. From initial grid load approvals to high-capacity step-down transformer commissioning, our engineers ensure faultless installations for plants, mills and commercial parks.",
+        'description' => "ARUL ELECTRICAL is a premier A-Grade **licensed electrical contractor** and **electrical engineering company** in Chennai, specialising in HT/LT electrical installations, panel board manufacturing, heavy equipment supply and statutory compliance.\n\nAs an **electrical contracting company** and consultancy, we focus on technically planned industrial electrical systems with uncompromising workmanship. From initial grid load approvals to high-capacity step-down transformer commissioning, our engineers ensure faultless installations for plants, mills and commercial parks.",
         'points'      => [
             ['title' => 'Electrical Contracting Expertise', 'text' => 'Class-1 turnkey execution for manufacturing plants, heavy mills and commercial parks.'],
-            ['title' => 'Technical Consultancy', 'text' => 'Single-line diagram (SLD) preparation, earthing designs and fault level calculations, backed by our electrical consultancy services and electrical engineering services.'],
+            ['title' => 'Technical Consultancy', 'text' => 'Single-line diagram (SLD) preparation, earthing designs and fault level calculations, backed by our **electrical consultancy services** and **electrical engineering services**.'],
             ['title' => 'Quality-Focused Execution', 'text' => 'Rigorous testing using calibrated Meggers, Hi-Pot analyzers and secondary injection kits.'],
         ],
         'badge_title' => 'Safety-First Protocols',
@@ -113,7 +113,7 @@ $sections = [
         'items'       => [
             [
                 'title' => 'Industrial Power Transformers', 'tag' => '',
-                'description' => 'Power transformer supplier and installer in Chennai for high-capacity step-down and step-up transformers (100 kVA to 5000 kVA), with turnkey civil erection, oil filtration and protective earthing.',
+                'description' => '**Power transformer supplier** and installer in Chennai for high-capacity step-down and step-up transformers (100 kVA to 5000 kVA), with turnkey civil erection, oil filtration and protective earthing.',
                 'points' => ['Oil Cooled (ONAN) & Dry Cast Resin', 'Off-Circuit Tap & OLTC Variants', 'Buchholz Relay & WTI/OTI Protection'],
                 'image' => $M . 'capability-transformer-solutions.webp',
                 'image_alt' => 'Oil-cooled power transformer on a concrete plinth in an outdoor transformer yard',
@@ -143,7 +143,7 @@ $sections = [
     'why' => [
         'eyebrow'     => 'Advantage Matrix',
         'title'       => 'Why Industries Choose ARUL ELECTRICAL',
-        'subtitle'    => 'We deliver electrical contracting and electrical engineering consultancy services for complex industrial and commercial infrastructure in Chennai.',
+        'subtitle'    => 'We deliver electrical contracting and **electrical engineering consultancy services** for complex industrial and commercial infrastructure in Chennai.',
         'stat_value'  => '100% Zero-Fault',
         'stat_label'  => 'Inspection Record Across Heavy Substations',
         'image_title' => 'A-Grade Certified Field Engineers',
@@ -309,11 +309,12 @@ TXT,
 // --only=key1,key2 limits the run to those sections (cards and media are skipped)
 $only = null;
 foreach ($argv as $a) if (str_starts_with($a, '--only=')) $only = array_filter(explode(',', substr($a, 7)));
-if ($only) $sections = array_intersect_key($sections, array_flip($only));
+
 
 $get = $pdo->prepare('SELECT data FROM sections WHERE section_key = ?');
 $upd = $pdo->prepare('UPDATE sections SET data = ? WHERE section_key = ?');
 $ins = $pdo->prepare('INSERT INTO sections (section_key, data, is_visible) VALUES (?, ?, 1)');
+if ($only) $sections = array_intersect_key($sections, array_flip($only));
 foreach ($sections as $key => $values) {
     $get->execute([$key]);
     $row = $get->fetch();
@@ -327,19 +328,18 @@ foreach ($sections as $key => $values) {
     }
 }
 
-if ($only) { say('Done (only: ' . implode(', ', $only) . ').'); exit; }
 
 // ---------- repeatable cards (matched by their order on the website) ----------
 $cards = [
     'capabilities' => [
         ['title' => 'HT & LT Electrical Contracting', 'link_text' => 'Class 1 Execution', 'image' => $M . 'capability-ht-lt-contracting.webp',
-         'description' => 'High-voltage grid connection, indoor and outdoor electrical substation installation, switchyard installation and a complete LT electrical power distribution system for industrial sites.',
+         'description' => 'High-voltage grid connection, indoor and outdoor electrical substation installation, switchyard installation and a complete LT **electrical power distribution system** for industrial sites.',
          'image_alt' => 'Engineers in orange overalls working in an HT switchyard with substation structures'],
         ['title' => 'Transformer Solutions', 'link_text' => 'Oil & Dry Type',
-         'description' => 'Transformer installation and supply, with civil plinth mounting, erection, vacuum oil filtration, BDV testing, earth mat grounding and live charging of power transformers.',
+         'description' => '**Transformer installation** and supply, with civil plinth mounting, erection, vacuum oil filtration, BDV testing, earth mat grounding and live charging of power transformers.',
          'image_alt' => 'Oil-filled power transformer with bushings inside a substation yard'],
         ['title' => 'Panel Board Manufacturing', 'link_text' => 'CPRI Type Tested',
-         'description' => 'In-house custom manufacturing of CPRI-compliant PCC and MCC panels, APFC (automatic power factor controller) panels, AMF (auto mains failure) panels, generator synchronization panels and industrial VCB boards.',
+         'description' => 'In-house custom manufacturing of CPRI-compliant **PCC and MCC panels**, APFC (automatic power factor controller) panels, AMF (auto mains failure) panels, generator synchronization panels and industrial VCB boards.',
          'image_alt' => 'Rows of industrial electrical control panels in a panel manufacturing facility'],
         ['title' => 'Documentation & Approvals', 'link_text' => '100% Guaranteed Filing',
          'description' => 'Statutory Indian Electricity Rules (Rule 45 & Rule 32) compliance, CEIG approval drawings, grid synchronization and licensing assistance.',
@@ -365,7 +365,7 @@ $cards = [
          'description' => 'Cable tray installation with heavy-duty GI perforated and ladder-type trays, structural supports, seismic clamps and organised multi-tier bundling.',
          'image_alt' => 'Technicians in orange suits routing cable trays beside a substation transformer yard'],
         ['title' => 'Transformer Sales & Installation',
-         'description' => 'Transformer installation and supply of high-efficiency copper-wound transformers, with civil foundation alignment, marshalling box wiring and full commissioning.',
+         'description' => '**Transformer installation** and supply of high-efficiency copper-wound transformers, with civil foundation alignment, marshalling box wiring and full commissioning.',
          'image_alt' => 'Engineers inspecting a power transformer at an outdoor substation'],
         ['title' => 'HT Panel Sales & Installation',
          'description' => 'HT panel supply and turnkey site installation of 11kV/22kV/33kV VCB panels, Ring Main Units (RMU) and protection relays.',
@@ -375,7 +375,7 @@ $cards = [
          'image_alt' => 'Technician and engineer commissioning a yellow diesel generator set with its control panel'],
     ],
     'why_items' => [
-        ['title' => 'A-Grade Electrical Contracting', 'description' => 'A statutorily recognised licence that enables our teams, as a government licensed electrical contractor, to handle unrestricted voltage classes and major utility interconnections.'],
+        ['title' => 'A-Grade Electrical Contracting', 'description' => 'A statutorily recognised licence that enables our teams, as a **government licensed electrical contractor**, to handle unrestricted voltage classes and major utility interconnections.'],
         ['title' => 'Technical Consultancy', 'description' => 'Expert power engineering guidance on transformer sizing, demand factor estimation and harmonic distortion mitigation.'],
         ['title' => 'HT/LT Infrastructure Expertise', 'description' => 'Proven engineering methods for heavy busduct installations, overhead HT distribution lines and internal LT raceways.'],
         ['title' => 'Documentation & Approval Support', 'description' => 'Turnkey statutory handling covering CEIG drawings, Rule 45 & Rule 32 submissions and final electrical safety fitness clearance.'],
@@ -398,6 +398,7 @@ $cards = [
     ],
 ];
 
+if ($only) $cards = array_intersect_key($cards, array_flip($only));
 foreach ($cards as $table => $list) {
     $ids = array_column($pdo->query("SELECT id FROM $table ORDER BY sort_order, id")->fetchAll(), 'id');
     foreach ($list as $i => $values) {
@@ -408,10 +409,12 @@ foreach ($cards as $table => $list) {
     say("  $table: " . min(count($list), count($ids)) . ' cards updated');
 }
 
+if (!$only || in_array('projects', $only, true)) {
 // The document lists four projects. Hide any extra project cards (not deleted — switch them back on in Admin → Projects).
 $ids = array_column($pdo->query('SELECT id FROM projects ORDER BY sort_order, id')->fetchAll(), 'id');
 foreach (array_slice($ids, 4) as $id) $pdo->prepare('UPDATE projects SET is_active = 0 WHERE id = ?')->execute([$id]);
 if (count($ids) > 4) say('  projects: ' . (count($ids) - 4) . ' extra card(s) hidden');
+}
 
 // ---------- Media Library alt text (used wherever an image has no card-specific alt text) ----------
 $alts = [
@@ -436,6 +439,7 @@ $alts = [
     'project-cable-tray-facility.webp'      => 'Multi-tier cable trays carrying armoured cables through a manufacturing facility',
     'project-dg-synchronization.webp'       => 'Two diesel generators with an AMF synchronizing panel in a generator room',
 ];
+if ($only && !in_array('media', $only, true)) { say('Done (only: ' . implode(', ', $only) . ').'); exit; }
 $st = $pdo->prepare('UPDATE media SET alt_text = ? WHERE path = ?');
 $n = 0;
 foreach ($alts as $file => $alt) { $st->execute([$alt, $M . $file]); $n += $st->rowCount(); }

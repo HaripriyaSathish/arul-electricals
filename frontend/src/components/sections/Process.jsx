@@ -1,5 +1,5 @@
 import Icon from '../common/Icon'
-import { SectionHead } from '../common/SiteBits'
+import { SectionHead, rich } from '../common/SiteBits'
 import { pad2 } from '../../utils/helpers'
 
 export default function Process({ data: d, items }) {
@@ -17,7 +17,7 @@ export default function Process({ data: d, items }) {
                   <span className="timeline__num">{pad2(i + 1)}</span>
                 </div>
                 <h3>{s.title}</h3>
-                {s.description && <p>{s.description}</p>}
+                {s.description && <p>{rich(s.description)}</p>}
                 {s.phase && <span className="timeline__phase">{d.phase_label || 'Phase'}: {s.phase}</span>}
               </div>
               <span className="timeline__dot">{pad2(i + 1)}</span>

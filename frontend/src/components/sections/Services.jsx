@@ -1,5 +1,5 @@
 import Icon from '../common/Icon'
-import { SectionHead, ZoomImg } from '../common/SiteBits'
+import { SectionHead, ZoomImg, rich } from '../common/SiteBits'
 import { pad2 } from '../../utils/helpers'
 
 export default function Services({ data: d, items, onEnquire }) {
@@ -17,7 +17,7 @@ export default function Services({ data: d, items, onEnquire }) {
               <div className="svc-card__body">
                 <span className="svc-card__no"><Icon name={s.icon || 'zap'} size={15} />{pad2(i + 1)} / {d.card_label || 'Service'}</span>
                 <h3>{s.title}</h3>
-                {s.description && <p>{s.description}</p>}
+                {s.description && <p>{rich(s.description)}</p>}
                 <button type="button" className="btn btn--soft btn--block" onClick={() => onEnquire(s.title)}>
                   {s.button_text || 'Enquire Now'}<Icon name="arrow-right" size={16} />
                 </button>

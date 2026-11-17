@@ -1,5 +1,5 @@
 import Icon from '../common/Icon'
-import { linkProps } from '../common/SiteBits'
+import { linkProps, rich } from '../common/SiteBits'
 import { mediaUrl } from '../../utils/helpers'
 
 const iconFor = (link, fallback) => {
@@ -16,7 +16,7 @@ export default function CTA({ data: d, settings }) {
       <div className="container cta__inner">
         {d.badge && <span className="hero__badge reveal"><i />{d.badge}</span>}
         <h2 className="reveal reveal--zoom">{d.title}</h2>
-        {d.subtitle && <p className="reveal">{d.subtitle}</p>}
+        {d.subtitle && <p className="reveal">{rich(d.subtitle)}</p>}
         <div className="hero__actions reveal">
           {d.primary_text && <a className="btn btn--yellow btn--lg" {...linkProps(d.primary_link, settings)}><Icon name={iconFor(d.primary_link, 'zap')} size={18} />{d.primary_text}</a>}
           {d.secondary_text && (

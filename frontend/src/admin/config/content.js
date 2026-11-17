@@ -8,7 +8,7 @@
 const HEADING = [
   { name: 'eyebrow', label: 'Small label above heading', placeholder: 'e.g. Our Expertise', half: true },
   { name: 'title', label: 'Section heading', type: 'textarea', rows: 2, required: true },
-  { name: 'subtitle', label: 'Short introduction', type: 'textarea', rows: 3 },
+  { name: 'subtitle', label: 'Short introduction', type: 'textarea', rows: 3, help: 'Tip: put **double stars** around words to make them bold.' },
 ]
 
 export const PAGES = {
@@ -53,7 +53,7 @@ export const PAGES = {
       { title: 'Heading & text', icon: 'edit', fields: [
         { name: 'eyebrow', label: 'Small label above heading', half: true },
         { name: 'title', label: 'Heading', type: 'textarea', rows: 2, required: true },
-        { name: 'description', label: 'Company introduction', type: 'textarea', rows: 4, help: 'The company name is highlighted in yellow automatically.' },
+        { name: 'description', label: 'Company introduction', type: 'textarea', rows: 4, help: 'The company name is highlighted in yellow automatically. Leave an empty line between paragraphs. Tip: put **double stars** around words to make them bold.' },
       ] },
       { title: 'Experience highlight', icon: 'award', fields: [
         { name: 'since_year', label: 'Established year', half: true, placeholder: '1987', help: 'Shown as “Since 1987” on the photo. Leave empty to hide.' },
@@ -69,7 +69,7 @@ export const PAGES = {
       ] },
       { title: 'Key points', icon: 'check-circle', fields: [
         { name: 'points', label: 'Points (with tick marks)', type: 'repeater', max: 6, addLabel: 'Add point', itemLabel: 'Point',
-          fields: [{ name: 'title', label: 'Title' }, { name: 'text', label: 'Description', type: 'textarea', rows: 2 }] },
+          fields: [{ name: 'title', label: 'Title' }, { name: 'text', label: 'Description', type: 'textarea', rows: 2, help: 'Tip: put **double stars** around words to make them bold.' }] },
       ] },
       { title: 'Button', icon: 'link', fields: [
         { name: 'button_text', label: 'Button text', half: true },
@@ -114,7 +114,7 @@ export const PAGES = {
           fields: [
             { name: 'title', label: 'Title', half: true },
             { name: 'tag', label: 'Image tag', half: true, placeholder: 'e.g. Power Transformers' },
-            { name: 'description', label: 'Description', type: 'textarea', rows: 3 },
+            { name: 'description', label: 'Description', type: 'textarea', rows: 3, help: 'Tip: put **double stars** around words to make them bold.' },
             { name: 'points', label: 'Bullet points', type: 'list', max: 8, addLabel: 'Add bullet' },
             { name: 'image', label: 'Image', type: 'image', folder: 'services' },
             { name: 'image_alt', label: 'Image alt text (SEO)', help: 'Describes the photo for Google and screen readers. Leave empty to use the alt text from the Media Library.' },
@@ -176,7 +176,7 @@ export const PAGES = {
         { name: 'items', label: 'Questions & answers', type: 'repeater', max: 20, addLabel: 'Add question', itemLabel: 'Question',
           fields: [
             { name: 'question', label: 'Question' },
-            { name: 'answer', label: 'Answer', type: 'textarea', rows: 4 },
+            { name: 'answer', label: 'Answer', type: 'textarea', rows: 4, help: 'Tip: put **double stars** around words to make them bold.' },
           ] },
       ] },
     ],
@@ -356,7 +356,7 @@ export const COLLECTIONS = {
     defaults: { icon: 'zap' },
     fields: [
       { name: 'title', label: 'Title', required: true },
-      { name: 'description', label: 'Description', type: 'textarea', rows: 3 },
+      { name: 'description', label: 'Description', type: 'textarea', rows: 3, help: 'Tip: put **double stars** around words to make them bold.' },
       { name: 'image', label: 'Card image', type: 'image', folder: 'capabilities' },
       { name: 'image_alt', label: 'Image alt text (SEO)', help: 'Describes the photo for Google and screen readers. Leave empty to use the alt text from the Media Library.' },
       { name: 'icon', label: 'Icon', type: 'icon', half: true },
@@ -370,7 +370,7 @@ export const COLLECTIONS = {
       { name: 'title', label: 'Service name', required: true },
       { name: 'tag', label: 'Image tag', half: true, placeholder: 'e.g. HT Grid' },
       { name: 'button_text', label: 'Button text', half: true, placeholder: 'Enquire Now' },
-      { name: 'description', label: 'Short description', type: 'textarea', rows: 3 },
+      { name: 'description', label: 'Short description', type: 'textarea', rows: 3, help: 'Tip: put **double stars** around words to make them bold.' },
       { name: 'image', label: 'Service image', type: 'image', folder: 'services' },
       { name: 'image_alt', label: 'Image alt text (SEO)', help: 'Describes the photo for Google and screen readers. Leave empty to use the alt text from the Media Library.' },
       { name: 'icon', label: 'Icon', type: 'icon' },
@@ -381,7 +381,7 @@ export const COLLECTIONS = {
     defaults: { icon: 'check-circle' },
     fields: [
       { name: 'title', label: 'Title', required: true },
-      { name: 'description', label: 'Description', type: 'textarea', rows: 3 },
+      { name: 'description', label: 'Description', type: 'textarea', rows: 3, help: 'Tip: put **double stars** around words to make them bold.' },
       { name: 'icon', label: 'Icon', type: 'icon' },
     ],
   },
@@ -394,7 +394,7 @@ export const COLLECTIONS = {
       { name: 'category', label: 'Filter category', half: true, suggestionsFrom: 'category', help: 'Projects with the same category are grouped under one filter tab.' },
       { name: 'tag', label: 'Image tag', half: true, placeholder: 'e.g. 33kV/433V Substation' },
       { name: 'link_text', label: 'Link text (optional)', half: true, placeholder: 'e.g. Discuss a Similar Project' },
-      { name: 'description', label: 'Description', type: 'textarea', rows: 3 },
+      { name: 'description', label: 'Description', type: 'textarea', rows: 3, help: 'Tip: put **double stars** around words to make them bold.' },
       { name: 'image', label: 'Project photo', type: 'image', folder: 'projects' },
       { name: 'image_alt', label: 'Image alt text (SEO)', help: 'Describes the photo for Google and screen readers. Leave empty to use the alt text from the Media Library.' },
       { name: 'is_featured', label: 'Large featured card', type: 'toggle', half: true, help: 'Shows this project in a wide card.' },
@@ -408,7 +408,7 @@ export const COLLECTIONS = {
       { name: 'title', label: 'Step title', required: true },
       { name: 'phase', label: 'Phase label', half: true, placeholder: 'e.g. Survey' },
       { name: 'icon', label: 'Icon', type: 'icon', half: true },
-      { name: 'description', label: 'Description', type: 'textarea', rows: 3 },
+      { name: 'description', label: 'Description', type: 'textarea', rows: 3, help: 'Tip: put **double stars** around words to make them bold.' },
     ],
   },
   testimonials: {
