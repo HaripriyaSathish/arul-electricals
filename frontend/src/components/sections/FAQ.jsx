@@ -22,7 +22,8 @@ export default function FAQ({ data: d, settings }) {
           {items.map((q, i) => {
             const isOpen = open === i
             return (
-              <div className={`faq__item reveal ${isOpen ? 'is-open' : ''}`} key={i} style={{ transitionDelay: `${i * 60}ms` }}>
+              // className must stay constant: the scroll-reveal adds 'is-in' to the DOM, and changing className would wipe it (card turns invisible)
+              <div className="faq__item reveal" data-open={isOpen} key={i} style={{ transitionDelay: `${i * 60}ms` }}>
                 <h3>
                   <button type="button" aria-expanded={isOpen} aria-controls={`faq-a-${i}`} id={`faq-q-${i}`} onClick={() => setOpen(isOpen ? -1 : i)}>
                     <span>{q.question}</span>
