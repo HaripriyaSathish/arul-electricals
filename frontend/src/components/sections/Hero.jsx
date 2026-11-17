@@ -8,7 +8,8 @@ export default function Hero({ data: d, settings }) {
   const slides = [...new Set([...slideList.map((s) => s.image), d.image].filter(Boolean))]
   const brighten = new Set(slideList.filter((s) => s.brighten).map((s) => s.image))
   const [index, setIndex] = useState(0)
-  const [paused, setPaused] = useState(false)
+  // Slides change automatically. They only pause while the browser tab is in the background.
+  const [paused, setPaused] = useState(() => typeof document !== 'undefined' && document.hidden)
   const delay = Math.max(3, Number(d.slide_seconds) || 6) * 1000
   const [loaded, setLoaded] = useState(() => new Set([0]))
   useEffect(() => {
@@ -16,15 +17,22 @@ export default function Hero({ data: d, settings }) {
   }, [index])
 
   useEffect(() => {
+    const onVis = () => setPaused(document.hidden)
+    document.addEventListener('visibilitychange', onVis)
+    return () => document.removeEventListener('visibilitychange', onVis)
+  }, [])
+
+  useEffect(() => {
     if (slides.length < 2 || paused) return
     const t = setInterval(() => setIndex((i) => (i + 1) % slides.length), delay)
     return () => clearInterval(t)
-  }, [slides.length, paused, delay])
+  }, [slides.length, paused, delay, index])
 
+  // arrows/dots: jump to a slide; the timer restarts from there (index is a dependency of the timer above)
   const go = (i) => setIndex((i + slides.length) % slides.length)
 
   return (
-    <section id="home" className="hero" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+    <section id="home" className="hero">
       <div className="hero__slides" role="img" aria-label={altFor(slides[index], d.title)}>
         {slides.length === 0 && <div className="hero__slide is-active" />}
         {slides.map((src, i) => {
