@@ -11,7 +11,7 @@ export default function Services({ data: d, items, onEnquire }) {
         <div className="svc-grid">
           {items.map((s, i) => (
             <article className="svc-card reveal" key={s.id} style={{ transitionDelay: `${(i % 3) * 80}ms` }}>
-              <ZoomImg src={s.image} alt={s.title} className="svc-card__img">
+              <ZoomImg src={s.image} alt={s.title} customAlt={s.image_alt} className="svc-card__img">
                 {s.tag && <span className="img-tag">{s.tag}</span>}
               </ZoomImg>
               <div className="svc-card__body">

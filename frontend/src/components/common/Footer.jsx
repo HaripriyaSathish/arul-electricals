@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import Icon from './Icon'
 import { altFor } from './SiteBits'
-import { NAV_LINKS } from '../../utils/constants'
-import { mediaUrl, telHref } from '../../utils/helpers'
+import { FOOTER_QUICK_LINKS } from '../../utils/constants'
+import { mediaUrl, telHref, whatsappHref } from '../../utils/helpers'
 
 /** Renders simple text: "## " headings, "- " bullets, blank line = new paragraph. */
 function RichText({ text = '' }) {
@@ -49,14 +49,29 @@ function LegalModal({ page, onClose }) {
   )
 }
 
+/** Figma "Connect with us" icons, always shown. Each opens its link from Site Settings (falls back to the enquiry form). */
+const SOCIALS = [
+  { key: "linkedin", icon: "briefcase", label: "LinkedIn" },
+  { key: "whatsapp", icon: "message-text", label: "WhatsApp chat" },
+  { key: "youtube", icon: "circle-play", label: "YouTube" },
+  { key: "email", icon: "mail", label: "Email" },
+]
+
+const socialHref = (k, s) => {
+  if (k === "whatsapp") return s.whatsapp ? whatsappHref(s.whatsapp, s.whatsapp_message) : ""
+  if (k === "email") return s.email ? `mailto:${s.email}` : ""
+  return s[k] || ""
+}
+
 export default function Footer({ settings: s, services = [], visible, legal = {} }) {
   const [openPage, setOpenPage] = useState(null)
-  const socials = ['facebook', 'linkedin', 'youtube', 'instagram'].filter((k) => s[k])
-  const links = NAV_LINKS.filter((l) => visible(l.section))
+  const quickLinks = FOOTER_QUICK_LINKS.filter((l) => visible(l.section))
+  const serviceLinks = (s.footer_services?.filter(Boolean).length ? s.footer_services.filter(Boolean) : services.map((sv) => sv.title))
+  const equipmentLinks = (s.footer_equipment || []).filter(Boolean)
   const legalPages = [
-    { key: 'privacy', title: legal.privacy_title || 'Privacy Policy', text: legal.privacy, icon: 'lock' },
-    { key: 'terms', title: legal.terms_title || 'Terms of Service', text: legal.terms, icon: 'file-text' },
-    { key: 'statutory', title: legal.statutory_title || 'Statutory Approvals', text: legal.statutory, icon: 'shield-check' },
+    { key: "privacy", title: legal.privacy_title || "Privacy Policy", text: legal.privacy, icon: "lock" },
+    { key: "terms", title: legal.terms_title || "Terms of Service", text: legal.terms, icon: "file-text" },
+    { key: "statutory", title: legal.statutory_title || "Statutory Approvals", text: legal.statutory, icon: "shield-check" },
   ].filter((p) => p.text)
 
   return (
@@ -73,11 +88,11 @@ export default function Footer({ settings: s, services = [], visible, legal = {}
           <div className="footer__top-actions">
             {s.phone && (
               <a className="footer__hotline" href={telHref(s.phone)}>
-                <span><Icon name="phone" size={18} /></span>
-                <div><small>{s.hotline_label || 'Call us'}</small><b>{s.phone}</b></div>
+                <span><Icon name="asterisk" size={18} strokeWidth={2.6} /></span>
+                <div><small>{s.hotline_label || "Call us"}</small><b>{s.phone}</b></div>
               </a>
             )}
-            <a className="btn btn--yellow" href="#contact"><Icon name="calendar" size={17} />{s.nav_cta_text || 'Request a Consultation'}</a>
+            <a className="btn btn--yellow" href="#contact"><Icon name="clock" size={17} />{s.footer_button_text || s.nav_cta_text || "Request a Consultation"}</a>
           </div>
         </div>
 
@@ -90,27 +105,42 @@ export default function Footer({ settings: s, services = [], visible, legal = {}
                 {s.certifications.filter(Boolean).map((c) => <span key={c}><Icon name="shield-check" size={14} />{c}</span>)}
               </div>
             )}
-            {socials.length > 0 && (
-              <div className="footer__social">
-                {socials.map((k) => <a key={k} href={s[k]} target="_blank" rel="noreferrer" aria-label={k}><Icon name={k} size={18} /></a>)}
-              </div>
-            )}
+            <span className="footer__social-title">{s.social_title || "Connect with us"}</span>
+            <div className="footer__social">
+              {SOCIALS.map((so) => {
+                const href = socialHref(so.key, s)
+                const external = href && !href.startsWith("mailto:")
+                return (
+                  <a key={so.key} href={href || "#contact"} aria-label={so.label} title={so.label}
+                    {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+                    <Icon name={so.icon} size={18} />
+                  </a>
+                )
+              })}
+            </div>
           </div>
 
-          {services.length > 0 && (
+          {serviceLinks.length > 0 && (
             <div>
-              <h5>{s.footer_services_title || 'Our Services'}</h5>
-              <ul>{services.map((sv) => <li key={sv.id}><a href="#services"><Icon name="chevron-right" size={14} />{sv.title}</a></li>)}</ul>
+              <h5>{s.footer_services_title || "Our Services"}</h5>
+              <ul className="footer__dots">{serviceLinks.map((t, i) => <li key={i}><a href="#services"><i className="footer__dot" />{t}</a></li>)}</ul>
+            </div>
+          )}
+
+          {equipmentLinks.length > 0 && (
+            <div>
+              <h5>{s.footer_equipment_title || "Power Equipment"}</h5>
+              <ul className="footer__dots">{equipmentLinks.map((t, i) => <li key={i}><a href={visible("equipment") ? "#equipment" : "#services"}><i className="footer__dot" />{t}</a></li>)}</ul>
             </div>
           )}
 
           <div>
-            <h5>{s.footer_links_title || 'Quick Links'}</h5>
-            <ul>{links.map((l) => <li key={l.href}><a href={l.href}><Icon name="chevron-right" size={14} />{s[`nav_${l.key}`] || l.label}</a></li>)}</ul>
+            <h5>{s.footer_links_title || "Quick Links"}</h5>
+            <ul>{quickLinks.map((l) => <li key={l.href}><a href={l.href}><Icon name="chevron-right" size={14} />{s[`quick_${l.key}`] || l.label}</a></li>)}</ul>
           </div>
 
           <div className="footer__contact">
-            <h5>{s.footer_contact_title || 'Contact Us'}</h5>
+            <h5>{s.footer_contact_title || "Contact Us"}</h5>
             <ul>
               {s.address && <li><Icon name="map-pin" size={17} /><span>{s.address}</span></li>}
               {s.phone && <li><Icon name="phone" size={17} /><a href={telHref(s.phone)}>{s.phone}</a></li>}
@@ -121,7 +151,10 @@ export default function Footer({ settings: s, services = [], visible, legal = {}
         </div>
 
         <div className="footer__bottom">
-          <span>{s.copyright}</span>
+          <div className="footer__bottom-left">
+            <span>{s.copyright}</span>
+            {s.legal_line && <small>{s.legal_line}</small>}
+          </div>
           {legalPages.length > 0 && (
             <nav className="footer__legal" aria-label="Legal">
               {legalPages.map((p) => <button key={p.key} type="button" onClick={() => setOpenPage(p)}>{p.title}</button>)}

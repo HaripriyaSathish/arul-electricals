@@ -22,7 +22,7 @@ export default function WhyChooseUs({ data: d, items }) {
         <div className="why__grid">
           {d.image && (
             <div className="why__photo reveal reveal--left">
-              <ZoomImg src={d.image} alt={d.image_title || d.title} className="why__img" />
+              <ZoomImg src={d.image} alt={d.image_title || d.title} customAlt={d.image_alt} className="why__img" />
               {(d.image_title || d.image_text) && (
                 <div className="why__caption">
                   <b><Icon name="check-circle" size={18} />{d.image_title}</b>

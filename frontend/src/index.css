@@ -130,8 +130,8 @@ button { font-family: inherit; }
 /* ---------- Navbar ---------- */
 .nav { position: sticky; top: 0; z-index: 100; background: #fff; transition: box-shadow .3s, background .3s; }
 .nav.is-scrolled { box-shadow: 0 10px 30px -18px rgba(49, 0, 95, .4); background: rgba(255, 255, 255, .97); backdrop-filter: blur(10px); }
-.nav__inner { height: var(--nav-h); display: flex; align-items: center; gap: 28px; }
-.brand { display: flex; align-items: center; gap: 14px; text-decoration: none; min-width: 0; flex-shrink: 1; }
+.nav__inner { height: var(--nav-h); display: flex; align-items: center; gap: 20px; }
+.brand { display: flex; align-items: center; gap: 14px; text-decoration: none; min-width: 0; flex-shrink: 0; }
 .brand__logo { width: 64px; height: 64px; object-fit: contain; flex-shrink: 0; transition: transform .4s var(--ease); }
 .brand:hover .brand__logo { transform: rotate(-8deg) scale(1.05); }
 .brand__logo--icon { display: grid; place-items: center; border-radius: 16px; background: var(--violet); color: var(--yellow); }
@@ -139,9 +139,9 @@ button { font-family: inherit; }
 .brand__name { display: flex; align-items: center; gap: 8px; font: 800 21px/1.1 var(--font-h); color: var(--violet); letter-spacing: .3px; white-space: nowrap; }
 .brand__name em { font-style: normal; font-size: 10.5px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; background: var(--violet); color: var(--yellow); padding: 3px 8px; border-radius: 99px; }
 .brand__tag { font-size: 13px; margin-top: 4px; letter-spacing: .2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.nav__links { display: flex; align-items: center; gap: 6px; margin-left: auto; }
-.nav__links a { position: relative; padding: 10px 14px; font-weight: 600; font-size: 15px; color: var(--violet-d); text-decoration: none; border-radius: 8px; transition: color .2s; }
-.nav__links a::after { content: ''; position: absolute; left: 14px; right: 14px; bottom: 4px; height: 3px; border-radius: 3px; background: var(--yellow); transform: scaleX(0); transition: transform .3s var(--ease); }
+.nav__links { display: flex; align-items: center; gap: 2px; margin-left: auto; flex-shrink: 0; }
+.nav__links a { position: relative; white-space: nowrap; padding: 10px 11px; font-weight: 600; font-size: 15px; color: var(--violet-d); text-decoration: none; border-radius: 8px; transition: color .2s; }
+.nav__links a::after { content: ''; position: absolute; left: 11px; right: 11px; bottom: 4px; height: 3px; border-radius: 3px; background: var(--yellow); transform: scaleX(0); transition: transform .3s var(--ease); }
 .nav__links a:hover, .nav__links a.is-active { color: var(--violet); }
 .nav__links a:hover::after, .nav__links a.is-active::after { transform: scaleX(1); }
 .nav__links .nav__cta-mobile { display: none; }
@@ -490,14 +490,9 @@ button { font-family: inherit; }
 .site-loader__error .icon { color: var(--violet); }
 
 /* ================= Responsive ================= */
-@media (max-width: 1180px) {
-  .nav__inner { gap: 16px; }
-  .nav__links a { padding: 10px 10px; }
-  .nav__links a::after { left: 10px; right: 10px; }
-  .cap-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (max-width: 1080px) {
-  :root { --nav-h: 76px; }
+/* Header: below 1240px the six menu links + full tagline no longer fit on one line, so the menu folds into the hamburger */
+@media (max-width: 1240px) {
+  .brand { flex-shrink: 1; }
   .nav__cta { display: none; }
   .nav__toggle { display: grid; }
   .nav__links {
@@ -508,6 +503,12 @@ button { font-family: inherit; }
   .nav__links a { font-size: 18px; padding: 14px 6px; border-bottom: 1px solid var(--border); border-radius: 0; }
   .nav__links a::after { display: none; }
   .nav__links .nav__cta-mobile { display: inline-flex; margin-top: 18px; border: 0; height: 52px; }
+}
+@media (max-width: 1180px) {
+  .cap-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 1080px) {
+  :root { --nav-h: 76px; }
   .brand__logo { width: 54px; height: 54px; }
   .about__grid, .feature, .contact__grid { grid-template-columns: 1fr; gap: 50px; }
   .about__media { max-width: 640px; margin: 0 auto; width: 100%; }
@@ -715,3 +716,44 @@ button { font-family: inherit; }
 .testi:hover figcaption b { color: var(--violet); }
 .testi:hover .testi__avatar { background: var(--yellow); color: var(--violet-d); }
 .testi__avatar { transition: background .3s, color .3s; }
+
+/* Header: menu items and button always stay on one line */
+.nav__cta { white-space: nowrap; flex-shrink: 0; }
+
+/* ---------- Equipment catalog ---------- */
+.equip-card p { margin-bottom: 14px; flex: 0 0 auto; }
+.equip-card__points { list-style: none; padding: 0; margin: 0 0 20px; display: grid; gap: 8px; flex: 1; align-content: start; }
+.equip-card__points li { display: flex; gap: 8px; font-size: 14px; font-weight: 600; color: var(--text); }
+.equip-card__points .icon { color: var(--violet); flex-shrink: 0; margin-top: 2px; }
+
+/* ---------- FAQ ---------- */
+.faq { display: grid; grid-template-columns: .9fr 1.3fr; gap: 60px; align-items: start; }
+.faq__intro { position: sticky; top: calc(var(--nav-h) + 24px); }
+.faq__intro h2 { font-size: clamp(28px, 3.4vw, 40px); margin: 12px 0 14px; }
+.faq__intro p { color: var(--muted); font-size: 16px; margin-bottom: 24px; }
+.faq__list { display: grid; gap: 14px; }
+.faq__item { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; transition: border-color .3s, box-shadow .3s; }
+.faq__item.is-open { border-color: var(--violet); box-shadow: var(--shadow-lg); }
+.faq__item h3 { margin: 0; font-size: 16.5px; }
+.faq__item button { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 18px 22px; border: 0; background: none; text-align: left; font: 700 16.5px var(--font-h); color: var(--text); cursor: pointer; }
+.faq__item button .icon { flex-shrink: 0; color: var(--violet); transition: transform .3s var(--ease); }
+.faq__item.is-open button .icon { transform: rotate(180deg); }
+.faq__item button:hover span { color: var(--violet); }
+.faq__answer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .35s var(--ease); }
+.faq__answer > div { overflow: hidden; }
+.faq__item.is-open .faq__answer { grid-template-rows: 1fr; }
+.faq__answer p { padding: 0 22px 20px; margin: 0; color: var(--muted); font-size: 15px; }
+@media (max-width: 1080px) { .faq { grid-template-columns: 1fr; gap: 30px; } .faq__intro { position: static; } }
+@media (max-width: 720px) { .faq__item button { padding: 16px 18px; font-size: 15.5px; } .faq__answer p { padding: 0 18px 18px; } }
+
+/* ---------- Footer (matches Figma: 5 columns, dot bullets, Connect with us) ---------- */
+.footer__cols { grid-template-columns: 1.45fr 1.05fr 1fr .85fr 1.2fr; gap: 34px; }
+.footer ul.footer__dots a .footer__dot { width: 5px; height: 5px; border-radius: 50%; background: var(--yellow); margin-top: 9px; flex-shrink: 0; }
+.footer__social-title { display: block; margin-top: 22px; font-size: 11.5px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255, 255, 255, .6); }
+.footer__social { margin-top: 10px; }
+.footer__social a { border: 1px solid rgba(255, 255, 255, .14); }
+.footer__bottom-left { display: grid; gap: 4px; }
+.footer__bottom-left small { font-size: 12px; color: rgba(255, 255, 255, .5); }
+@media (max-width: 1180px) { .footer__cols { grid-template-columns: repeat(3, minmax(0, 1fr)); } .footer__about { grid-column: 1 / -1; } }
+@media (max-width: 720px) { .footer__cols { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 460px) { .footer__cols { grid-template-columns: 1fr; } }

@@ -24,7 +24,7 @@ export default function Projects({ data: d, items, onEnquire }) {
         <div className="proj-grid">
           {shown.map((p) => (
             <article key={p.id} className={`proj-card reveal reveal--zoom ${p.is_featured ? 'proj-card--featured' : ''}`}>
-              <ZoomImg src={p.image} alt={p.title} className="proj-card__img">
+              <ZoomImg src={p.image} alt={p.title} customAlt={p.image_alt} className="proj-card__img">
                 {p.tag && <span className="img-tag">{p.tag}</span>}
                 {p.is_illustrative && <span className="proj-card__note">{d.illustrative_label || 'Illustrative image'}</span>}
               </ZoomImg>

@@ -20,6 +20,8 @@ import Process from '../components/sections/Process'
 import Testimonials from '../components/sections/Testimonials'
 import CTA from '../components/sections/CTA'
 import Contact from '../components/sections/Contact'
+import Equipment from '../components/sections/Equipment'
+import FAQ from '../components/sections/FAQ'
 
 export default function Home() {
   const [site, setSite] = useState(null)
@@ -56,6 +58,16 @@ export default function Home() {
     setMeta('property', 'og:image', image)
     setMeta('property', 'og:url', window.location.origin + '/')
     setMeta('name', 'twitter:card', image ? 'summary_large_image' : 'summary')
+    // FAQ structured data (Google “FAQ” rich results) — built from Admin → FAQ
+    const faqs = (site.sections.faq?.is_visible !== false ? site.sections.faq?.data?.items || [] : []).filter((q) => q?.question && q?.answer)
+    let ld = document.getElementById('faq-jsonld')
+    if (faqs.length) {
+      if (!ld) { ld = document.createElement('script'); ld.type = 'application/ld+json'; ld.id = 'faq-jsonld'; document.head.appendChild(ld) }
+      ld.textContent = JSON.stringify({
+        '@context': 'https://schema.org', '@type': 'FAQPage',
+        mainEntity: faqs.map((q) => ({ '@type': 'Question', name: q.question, acceptedAnswer: { '@type': 'Answer', text: q.answer } })),
+      })
+    } else if (ld) ld.remove()
     // honour a #hash in the URL after content loads
     if (window.location.hash) setTimeout(() => document.querySelector(window.location.hash)?.scrollIntoView(), 50)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -80,12 +92,14 @@ export default function Home() {
         {visible('capabilities') && <Capabilities data={sec('capabilities')} items={list('capabilities')} />}
         {visible('about') && <About data={sec('about')} siteName={s.site_name} />}
         {visible('services') && <Services data={sec('services')} items={list('services')} onEnquire={enquire} />}
+        {visible('equipment') && <Equipment data={sec('equipment')} onEnquire={enquire} />}
         {visible('panel_feature') && <PanelFeature data={sec('panel_feature')} />}
         {visible('why') && <WhyChooseUs data={sec('why')} items={list('why_items')} />}
         {visible('projects') && <Projects data={sec('projects')} items={list('projects')} onEnquire={enquire} />}
         {visible('process') && <Process data={sec('process')} items={list('process_steps')} />}
         {visible('testimonials') && <Testimonials data={sec('testimonials')} items={list('testimonials')} />}
         {visible('cta') && <CTA data={sec('cta')} settings={s} />}
+        {visible('faq') && <FAQ data={sec('faq')} settings={s} />}
         {visible('contact') && <Contact data={sec('contact')} settings={s} preset={preset} />}
       </main>
       <Footer settings={s} services={list('services')} visible={visible} legal={sec('legal')} />

@@ -11,7 +11,7 @@ export default function Capabilities({ data: d, items }) {
         <div className="cap-grid">
           {items.map((c, i) => (
             <article className="cap-card reveal reveal--zoom" key={c.id} style={{ transitionDelay: `${(i % 4) * 80}ms` }}>
-              <ZoomImg src={c.image} alt={c.title} className="cap-card__img" />
+              <ZoomImg src={c.image} alt={c.title} customAlt={c.image_alt} className="cap-card__img" />
               <div className="cap-card__body">
                 <div className="cap-card__top">
                   <span className="icon-tile"><Icon name={c.icon || 'zap'} size={20} /></span>

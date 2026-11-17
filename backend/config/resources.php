@@ -17,6 +17,7 @@ return [
                 'title'       => ['type' => 'string', 'required' => true, 'max' => 150],
                 'description' => ['type' => 'text'],
                 'image'       => ['type' => 'image'],
+                'image_alt'   => ['type' => 'string', 'max' => 255],
                 'icon'        => ['type' => 'string', 'max' => 50],
                 'link_text'   => ['type' => 'string', 'max' => 100],
             ],
@@ -29,6 +30,7 @@ return [
                 'tag'         => ['type' => 'string', 'max' => 60],
                 'description' => ['type' => 'text'],
                 'image'       => ['type' => 'image'],
+                'image_alt'   => ['type' => 'string', 'max' => 255],
                 'icon'        => ['type' => 'string', 'max' => 50],
                 'button_text' => ['type' => 'string', 'max' => 60],
             ],
@@ -52,6 +54,7 @@ return [
                 'tag'             => ['type' => 'string', 'max' => 80],
                 'description'     => ['type' => 'text'],
                 'image'           => ['type' => 'image'],
+                'image_alt'   => ['type' => 'string', 'max' => 255],
                 'link_text'       => ['type' => 'string', 'max' => 80],
                 'is_featured'     => ['type' => 'bool'],
                 'is_illustrative' => ['type' => 'bool'],
@@ -82,7 +85,7 @@ return [
     ],
 
     'sections' => [
-        'hero', 'capabilities', 'about', 'services', 'panel_feature', 'why', 'projects',
-        'process', 'testimonials', 'cta', 'contact', 'settings', 'legal',
+        'hero', 'capabilities', 'about', 'services', 'equipment', 'panel_feature', 'why', 'projects',
+        'process', 'testimonials', 'cta', 'faq', 'contact', 'settings', 'legal',
     ],
 ];

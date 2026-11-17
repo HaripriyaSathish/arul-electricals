@@ -20,11 +20,12 @@ export const setAltMap = (map) => { ALT_MAP = map || {} }
 export const altFor = (src, fallback = '') => ALT_MAP[src] || fallback
 
 /** Image that zooms in gently when scrolled into view and on hover. */
-export function ZoomImg({ src, alt = '', className = '', children, eager = false }) {
+export function ZoomImg({ src, alt = '', customAlt = '', className = '', children, eager = false }) {
   if (!src) return <div className={`zimg zimg--empty ${className}`}>{children}</div>
   return (
     <div className={`zimg reveal-img ${className}`}>
-      <img src={mediaUrl(src)} alt={altFor(src, alt)} loading={eager ? 'eager' : 'lazy'} decoding="async"
+      {/* customAlt = alt text typed on this card (wins), else the image's alt from the Media Library */}
+      <img src={mediaUrl(src)} alt={customAlt || altFor(src, alt)} loading={eager ? 'eager' : 'lazy'} decoding="async"
         onLoad={(e) => e.currentTarget.parentElement?.classList.add('is-loaded')}
         onError={(e) => e.currentTarget.parentElement?.classList.add('is-loaded')} />
       {children}

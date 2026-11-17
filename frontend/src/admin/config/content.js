@@ -62,6 +62,7 @@ export const PAGES = {
       ] },
       { title: 'Photo & badge card', icon: 'image', fields: [
         { name: 'image', label: 'Photo', type: 'image', folder: 'about' },
+        { name: 'image_alt', label: 'Image alt text (SEO)', help: 'Describes the photo for Google and screen readers. Leave empty to use the alt text from the Media Library.' },
         { name: 'badge_title', label: 'Badge card title', half: true },
         { name: 'badge_label', label: 'Badge card yellow tag', half: true },
         { name: 'badge_text', label: 'Badge card text', type: 'textarea', rows: 2 },
@@ -95,9 +96,30 @@ export const PAGES = {
       ] },
       { title: 'Photo & button', icon: 'image', fields: [
         { name: 'image', label: 'Workshop / manufacturing photo', type: 'image', folder: 'services' },
+        { name: 'image_alt', label: 'Image alt text (SEO)', help: 'Describes the photo for Google and screen readers. Leave empty to use the alt text from the Media Library.' },
         { name: 'stamp_text', label: 'Label on the photo', half: true, placeholder: 'Built in-house' },
         { name: 'button_text', label: 'Button text', half: true },
         { name: 'button_link', label: 'Button link', type: 'link', half: true },
+      ] },
+    ],
+  },
+
+  equipment: {
+    path: 'equipment', title: 'Equipment', icon: 'battery', anchor: 'equipment', sectionKey: 'equipment',
+    description: 'Equipment catalog cards (transformers, HT switchgear, DG sets). Shown after Services; also linked from the menu and footer.',
+    groups: [
+      { title: 'Heading', icon: 'edit', fields: [...HEADING, { name: 'button_text', label: 'Default button text', half: true, placeholder: 'Enquire Equipment' }] },
+      { title: 'Equipment cards', icon: 'layers', fields: [
+        { name: 'items', label: 'Cards', type: 'repeater', max: 9, addLabel: 'Add equipment', itemLabel: 'Equipment',
+          fields: [
+            { name: 'title', label: 'Title', half: true },
+            { name: 'tag', label: 'Image tag', half: true, placeholder: 'e.g. Power Transformers' },
+            { name: 'description', label: 'Description', type: 'textarea', rows: 3 },
+            { name: 'points', label: 'Bullet points', type: 'list', max: 8, addLabel: 'Add bullet' },
+            { name: 'image', label: 'Image', type: 'image', folder: 'services' },
+            { name: 'image_alt', label: 'Image alt text (SEO)', help: 'Describes the photo for Google and screen readers. Leave empty to use the alt text from the Media Library.' },
+            { name: 'button_text', label: 'Button text', half: true, placeholder: 'Enquire Equipment' },
+          ] },
       ] },
     ],
   },
@@ -112,6 +134,7 @@ export const PAGES = {
       { name: 'stat_value', label: 'Highlight box — big text', half: true },
       { name: 'stat_label', label: 'Highlight box — small text', half: true },
       { name: 'image', label: 'Side photo', type: 'image', folder: 'about' },
+      { name: 'image_alt', label: 'Image alt text (SEO)', help: 'Describes the photo for Google and screen readers. Leave empty to use the alt text from the Media Library.' },
       { name: 'image_title', label: 'Photo caption title', half: true },
       { name: 'image_text', label: 'Photo caption text', half: true },
     ],
@@ -136,6 +159,27 @@ export const PAGES = {
     description: 'Client reviews. Hidden automatically when there are none.',
     notice: 'Only add genuine, client-approved testimonials. Do not invent names, quotes, companies or ratings.',
     collection: 'testimonials', headingFields: HEADING,
+  },
+
+  faq: {
+    path: 'faq', title: 'FAQ', icon: 'message', anchor: 'faq', sectionKey: 'faq',
+    description: 'Frequently asked questions, shown between the call-to-action banner and the contact section. Also sent to Google as FAQ structured data.',
+    groups: [
+      { title: 'Heading', icon: 'edit', fields: [
+        { name: 'eyebrow', label: 'Small label above heading', half: true },
+        { name: 'title', label: 'Heading', type: 'textarea', rows: 2, required: true },
+        { name: 'subtitle', label: 'Text beside the questions', type: 'textarea', rows: 3 },
+        { name: 'button_text', label: 'Button text (optional)', half: true },
+        { name: 'button_link', label: 'Button link', type: 'link', half: true },
+      ] },
+      { title: 'Questions', icon: 'list', fields: [
+        { name: 'items', label: 'Questions & answers', type: 'repeater', max: 20, addLabel: 'Add question', itemLabel: 'Question',
+          fields: [
+            { name: 'question', label: 'Question' },
+            { name: 'answer', label: 'Answer', type: 'textarea', rows: 4 },
+          ] },
+      ] },
+    ],
   },
 
   cta: {
@@ -230,7 +274,7 @@ PAGES.legal = {
 }
 
 /** Sidebar order for "Website content" (same order as the homepage). */
-export const CONTENT_ORDER = ['hero', 'capabilities', 'about', 'services', 'panel_feature', 'why', 'projects', 'process', 'testimonials', 'cta', 'contact']
+export const CONTENT_ORDER = ['hero', 'capabilities', 'about', 'services', 'equipment', 'panel_feature', 'why', 'projects', 'process', 'testimonials', 'cta', 'faq', 'contact']
 
 export const SETTINGS_PAGE = {
   title: 'Site Settings', icon: 'settings', sectionKey: 'settings', canHide: false,
@@ -265,26 +309,34 @@ export const SETTINGS_PAGE = {
       { name: 'footer_tagline', label: 'Footer tagline', half: true },
       { name: 'footer_badge', label: 'Footer badge', half: true },
       { name: 'hotline_label', label: 'Hotline box label', half: true },
+      { name: 'footer_button_text', label: 'Footer yellow button text', half: true, placeholder: 'Schedule Technical Audit' },
       { name: 'footer_about', label: 'About the company (footer)', type: 'textarea', rows: 3 },
       { name: 'certifications', label: 'Certification badges', type: 'list', addLabel: 'Add badge' },
+      { name: 'footer_services', label: 'Engineering services links', type: 'list', addLabel: 'Add link', help: 'Leave empty to list the service card titles automatically.' },
+      { name: 'footer_equipment_title', label: 'Footer heading: Power equipment', half: true },
+      { name: 'social_title', label: 'Social icons heading', half: true, placeholder: 'Connect with us' },
+      { name: 'footer_equipment', label: 'Power equipment links', type: 'list', addLabel: 'Add link' },
       { name: 'copyright', label: 'Copyright line' },
+      { name: 'legal_line', label: 'Small line under the copyright' },
     ] },
     { title: 'Menu & labels', icon: 'menu', fields: [
       { name: 'nav_home', label: 'Menu: Home', half: true },
       { name: 'nav_about', label: 'Menu: About', half: true },
       { name: 'nav_services', label: 'Menu: Services', half: true },
+      { name: 'nav_equipment', label: 'Menu: Equipment', half: true },
       { name: 'nav_projects', label: 'Menu: Projects', half: true },
       { name: 'nav_contact', label: 'Menu: Contact', half: true },
       { name: 'footer_about_title', label: 'Footer heading: About', half: true },
       { name: 'footer_services_title', label: 'Footer heading: Services', half: true },
       { name: 'footer_links_title', label: 'Footer heading: Quick links', half: true },
+      { name: 'quick_consultation', label: 'Quick link: Consultation', half: true },
       { name: 'footer_contact_title', label: 'Footer heading: Contact', half: true },
       { name: 'whatsapp_label', label: 'WhatsApp button tooltip', half: true },
       { name: 'call_label', label: 'Call button tooltip', half: true },
     ] },
     { title: 'Social links', icon: 'globe', fields: [
       { name: 'facebook', label: 'Facebook URL', type: 'link', half: true },
-      { name: 'linkedin', label: 'LinkedIn URL', type: 'link', half: true },
+      { name: 'linkedin', label: 'LinkedIn URL', type: 'link', half: true, help: 'The footer always shows the LinkedIn, WhatsApp, YouTube and Email icons from the design. WhatsApp and Email use Contact details.' },
       { name: 'youtube', label: 'YouTube URL', type: 'link', half: true },
       { name: 'instagram', label: 'Instagram URL', type: 'link', half: true },
     ] },
@@ -306,6 +358,7 @@ export const COLLECTIONS = {
       { name: 'title', label: 'Title', required: true },
       { name: 'description', label: 'Description', type: 'textarea', rows: 3 },
       { name: 'image', label: 'Card image', type: 'image', folder: 'capabilities' },
+      { name: 'image_alt', label: 'Image alt text (SEO)', help: 'Describes the photo for Google and screen readers. Leave empty to use the alt text from the Media Library.' },
       { name: 'icon', label: 'Icon', type: 'icon', half: true },
       { name: 'link_text', label: 'Footer text on card', half: true, placeholder: 'e.g. Oil & Dry Type' },
     ],
@@ -319,6 +372,7 @@ export const COLLECTIONS = {
       { name: 'button_text', label: 'Button text', half: true, placeholder: 'Enquire Now' },
       { name: 'description', label: 'Short description', type: 'textarea', rows: 3 },
       { name: 'image', label: 'Service image', type: 'image', folder: 'services' },
+      { name: 'image_alt', label: 'Image alt text (SEO)', help: 'Describes the photo for Google and screen readers. Leave empty to use the alt text from the Media Library.' },
       { name: 'icon', label: 'Icon', type: 'icon' },
     ],
   },
@@ -342,6 +396,7 @@ export const COLLECTIONS = {
       { name: 'link_text', label: 'Link text (optional)', half: true, placeholder: 'e.g. Discuss a Similar Project' },
       { name: 'description', label: 'Description', type: 'textarea', rows: 3 },
       { name: 'image', label: 'Project photo', type: 'image', folder: 'projects' },
+      { name: 'image_alt', label: 'Image alt text (SEO)', help: 'Describes the photo for Google and screen readers. Leave empty to use the alt text from the Media Library.' },
       { name: 'is_featured', label: 'Large featured card', type: 'toggle', half: true, help: 'Shows this project in a wide card.' },
       { name: 'is_illustrative', label: 'Illustrative image', type: 'toggle', half: true, help: 'Labels the photo as illustrative (not an actual client site).' },
     ],

@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS capabilities (
   title VARCHAR(150) NOT NULL,
   description TEXT,
   image VARCHAR(255) DEFAULT '',
+  image_alt VARCHAR(255) DEFAULT '',
   icon VARCHAR(50) DEFAULT '',
   link_text VARCHAR(100) DEFAULT '',
   sort_order INT NOT NULL DEFAULT 0,
@@ -80,6 +81,7 @@ CREATE TABLE IF NOT EXISTS services (
   tag VARCHAR(60) DEFAULT '',
   description TEXT,
   image VARCHAR(255) DEFAULT '',
+  image_alt VARCHAR(255) DEFAULT '',
   icon VARCHAR(255) DEFAULT '',
   button_text VARCHAR(60) DEFAULT 'Enquire Now',
   sort_order INT NOT NULL DEFAULT 0,
@@ -107,6 +109,7 @@ CREATE TABLE IF NOT EXISTS projects (
   tag VARCHAR(80) DEFAULT '',
   description TEXT,
   image VARCHAR(255) DEFAULT '',
+  image_alt VARCHAR(255) DEFAULT '',
   link_text VARCHAR(80) DEFAULT '',
   is_featured SMALLINT NOT NULL DEFAULT 0,
   is_illustrative SMALLINT NOT NULL DEFAULT 0,
@@ -159,6 +162,11 @@ CREATE TABLE IF NOT EXISTS contacts (
 );
 CREATE INDEX IF NOT EXISTS contacts_status_idx ON contacts (status);
 CREATE INDEX IF NOT EXISTS contacts_created_idx ON contacts (created_at);
+
+-- upgrades for databases created before these columns existed
+ALTER TABLE capabilities ADD COLUMN IF NOT EXISTS image_alt VARCHAR(255) DEFAULT '';
+ALTER TABLE services ADD COLUMN IF NOT EXISTS image_alt VARCHAR(255) DEFAULT '';
+ALTER TABLE projects ADD COLUMN IF NOT EXISTS image_alt VARCHAR(255) DEFAULT '';
 
 -- keep updated_at current on every edit
 DO $$

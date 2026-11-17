@@ -6,7 +6,7 @@ export default function About({ data: d, siteName }) {
     <section id="about" className="section section--dark about">
       <div className="container about__grid">
         <div className="about__media reveal reveal--left">
-          <ZoomImg src={d.image} alt={d.title} className="about__img" />
+          <ZoomImg src={d.image} alt={d.title} customAlt={d.image_alt} className="about__img" />
           {d.since_year && (
             <div className="about__since">
               {d.since_prefix && <small>{d.since_prefix}</small>}
@@ -27,7 +27,10 @@ export default function About({ data: d, siteName }) {
         <div className="about__content reveal-group--right">
           {d.eyebrow && <span className="eyebrow eyebrow--yellow reveal">{d.eyebrow}</span>}
           <h2 className="reveal">{d.title}</h2>
-          {d.description && <p className="about__lead reveal">{highlight(d.description, siteName)}</p>}
+          {/* an empty line in the admin text starts a new paragraph */}
+          {String(d.description || '').split(/\n\s*\n/).map((para) => para.trim()).filter(Boolean).map((para, i) => (
+            <p key={i} className="about__lead reveal">{highlight(para, siteName)}</p>
+          ))}
           {d.points?.length > 0 && (
             <ul className="about__points">
               {d.points.filter((p) => p.title || p.text).map((p, i) => (
