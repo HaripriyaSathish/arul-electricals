@@ -147,6 +147,7 @@ CREATE TABLE IF NOT EXISTS contacts (
   equipment VARCHAR(100) DEFAULT '',
   location VARCHAR(200) DEFAULT '',
   message TEXT,
+  source VARCHAR(200) DEFAULT '',
   status ENUM('new','read','replied','closed') NOT NULL DEFAULT 'new',
   notes TEXT,
   ip VARCHAR(45) DEFAULT '',

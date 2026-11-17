@@ -155,6 +155,7 @@ CREATE TABLE IF NOT EXISTS contacts (
   equipment VARCHAR(100) DEFAULT '',
   location VARCHAR(200) DEFAULT '',
   message TEXT,
+  source VARCHAR(200) DEFAULT '',
   status VARCHAR(10) NOT NULL DEFAULT 'new' CHECK (status IN ('new','read','replied','closed')),
   notes TEXT,
   ip VARCHAR(45) DEFAULT '',
@@ -167,6 +168,7 @@ CREATE INDEX IF NOT EXISTS contacts_created_idx ON contacts (created_at);
 ALTER TABLE capabilities ADD COLUMN IF NOT EXISTS image_alt VARCHAR(255) DEFAULT '';
 ALTER TABLE services ADD COLUMN IF NOT EXISTS image_alt VARCHAR(255) DEFAULT '';
 ALTER TABLE projects ADD COLUMN IF NOT EXISTS image_alt VARCHAR(255) DEFAULT '';
+ALTER TABLE contacts ADD COLUMN IF NOT EXISTS source VARCHAR(200) DEFAULT '';
 
 -- keep updated_at current on every edit
 DO $$

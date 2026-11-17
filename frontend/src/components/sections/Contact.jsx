@@ -4,6 +4,7 @@ import { rich } from '../common/SiteBits'
 import { PublicAPI } from '../../api/endpoints'
 import { errorMessage, fieldErrors } from '../../api/axiosInstance'
 import { telHref, whatsappHref } from '../../utils/helpers'
+import { SECTION_NAMES } from '../../utils/constants'
 
 const EMPTY = { name: '', company: '', phone: '', email: '', voltage: '', equipment: '', location: '', message: '', website: '' }
 
@@ -20,6 +21,7 @@ export default function Contact({ data: d, settings: s, preset }) {
   const whatsappText = (f) => [
     `*${d.whatsapp_heading || `New Project Enquiry – ${s.site_name || 'Website'}`}*`,
     '',
+    [d.label_source || 'Enquired from', source],
     [d.label_name || 'Full Name', f.name],
     [d.label_company || 'Company / Organization', f.company],
     [d.label_phone || 'Mobile Number', f.phone],
@@ -31,9 +33,28 @@ export default function Contact({ data: d, settings: s, preset }) {
   ].map((row) => (Array.isArray(row) ? (String(row[1] || '').trim() ? `*${row[0]}:* ${String(row[1]).trim()}` : null) : row))
     .filter((row) => row !== null).join('\n')
 
-  // "Enquire Now" on a service/project pre-fills the requirement
+  // Where the visitor clicked to reach the form, e.g. "Services → HT Panel Sales & Installation"
+  const [source, setSource] = useState('')
+
+  // Any other link to the form (header menu, CTA, capability cards, FAQ, footer…): note its section and card
+  useEffect(() => {
+    const onClick = (e) => {
+      const a = e.target.closest?.('a[href="#contact"]')
+      if (!a) return
+      const area = a.closest('section[id], footer, header')
+      const name = area?.tagName === 'HEADER' ? 'Header Menu' : (SECTION_NAMES[area?.id] || area?.id || 'Website')
+      const card = a.closest('article')?.querySelector('h3')?.textContent?.trim()
+      const label = (card || a.textContent || '').trim()
+      setSource(card ? `${name} → ${card}` : label && area?.tagName !== 'HEADER' ? `${name} → ${label}` : name)
+    }
+    document.addEventListener('click', onClick, true)
+    return () => document.removeEventListener('click', onClick, true)
+  }, [])
+
+  // "Enquire Now" on a service/equipment/project card pre-fills the requirement
   useEffect(() => {
     if (!preset?.text) return
+    setSource(preset.source || '')
     setForm((f) => ({ ...f, message: f.message || `I would like to enquire about: ${preset.text}` }))
   }, [preset])
 
@@ -76,10 +97,11 @@ export default function Contact({ data: d, settings: s, preset }) {
     setStatus({ state: 'sending', message: '', waLink: '' })
     try {
       // still saved in Admin → Enquiries (and emailed if SMTP is set up), so nothing is lost if WhatsApp is not sent
-      const res = await PublicAPI.contact(form)
+      const res = await PublicAPI.contact({ ...form, source })
       const message = waLink ? (d.whatsapp_success || 'WhatsApp has opened with your enquiry. Tap Send in WhatsApp to deliver it to our engineering team.') : (d.success_message || res.message)
       setStatus({ state: 'sent', message, waLink })
       setForm(EMPTY)
+      setSource('')
     } catch (err) {
       setErrors(fieldErrors(err))
       setStatus({ state: 'error', message: errorMessage(err, 'Could not send your enquiry. Please call us instead.'), waLink: '' })

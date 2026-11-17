@@ -38,7 +38,7 @@ function EnquiryDrawer({ enquiry, onClose, onChange, onDelete }) {
 
   const details = [
     ['Company', e.company], ['Mobile', e.phone], ['Email', e.email], ['Voltage', e.voltage],
-    ['Equipment', e.equipment], ['Site location', e.location], ['Received', formatDate(e.created_at, true)],
+    ['Equipment', e.equipment], ['Site location', e.location], ['Enquired from', e.source], ['Received', formatDate(e.created_at, true)],
   ]
 
   return (

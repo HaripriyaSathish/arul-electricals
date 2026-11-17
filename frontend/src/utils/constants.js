@@ -8,6 +8,13 @@ export const NAV_LINKS = [
   { key: 'contact', label: 'Contact', href: '#contact', section: 'contact' },
 ]
 
+/** Readable section names (by section id) — used to note where a visitor clicked to open the enquiry form. */
+export const SECTION_NAMES = {
+  home: 'Hero Banner', capabilities: 'Capabilities', about: 'About Us', services: 'Services', equipment: 'Equipment',
+  'panel-feature': 'Panel Board Feature', why: 'Why Choose Us', projects: 'Projects', process: 'Our Workflow',
+  testimonials: 'Testimonials', cta: 'Call to Action', faq: 'FAQ', contact: 'Contact Section', footer: 'Footer',
+}
+
 /** Footer “Quick links” column (labels can be renamed in Admin → Site Settings → Footer). */
 export const FOOTER_QUICK_LINKS = [
   { key: 'about', label: 'About Us', href: '#about', section: 'about' },

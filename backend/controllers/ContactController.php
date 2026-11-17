@@ -21,6 +21,7 @@ class ContactController
             'equipment' => 'max:100',
             'location'  => 'max:200',
             'message'   => 'max:5000',
+            'source'    => 'max:200',
         ]);
         if ($errors) Response::error('Please check the highlighted fields.', 422, $errors);
 
@@ -37,6 +38,8 @@ class ContactController
             'equipment' => clean_string($in['equipment'] ?? '', 100),
             'location'  => clean_string($in['location'] ?? '', 200),
             'message'   => clean_string($in['message'] ?? '', 5000),
+            // where on the website the visitor clicked to open the form, e.g. "Services → HT Panel Sales & Installation"
+            'source'    => clean_string($in['source'] ?? '', 200),
             'ip'        => client_ip(),
         ];
         Database::insert('contacts', $enquiry);

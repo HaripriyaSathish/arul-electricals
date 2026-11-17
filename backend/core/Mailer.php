@@ -157,6 +157,7 @@ class Mailer
         $rows = [
             'Name' => $e['name'], 'Company' => $e['company'], 'Mobile' => $e['phone'], 'Email' => $e['email'],
             'Voltage' => $e['voltage'], 'Equipment' => $e['equipment'], 'Site location' => $e['location'],
+            'Enquired from' => $e['source'] ?? '',
         ];
         $tr = '';
         foreach ($rows as $k => $v) {

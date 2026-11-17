@@ -4,6 +4,7 @@ import { errorMessage } from '../api/axiosInstance'
 import { useFavicon } from '../hooks/useFetch'
 import { useReveal, setAltMap, plain } from '../components/common/SiteBits'
 import { mediaUrl } from '../utils/helpers'
+import { SECTION_NAMES } from '../utils/constants'
 import Navbar from '../components/common/Navbar'
 import Footer from '../components/common/Footer'
 import Loader from '../components/common/Loader'
@@ -79,8 +80,9 @@ export default function Home() {
   const visible = (k) => site.sections[k] ? site.sections[k].is_visible !== false : true
   const list = (k) => site.lists[k] || []
 
-  const enquire = (text) => {
-    setPreset({ text, at: Date.now() })
+  // 'Enquire' buttons on cards: pre-fill the form and note which section + card was clicked
+  const enquire = (section) => (text) => {
+    setPreset({ text, source: `${SECTION_NAMES[section] || section} → ${text}`, at: Date.now() })
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
   }
 
@@ -91,11 +93,11 @@ export default function Home() {
         <Hero data={sec('hero')} settings={s} />
         {visible('capabilities') && <Capabilities data={sec('capabilities')} items={list('capabilities')} />}
         {visible('about') && <About data={sec('about')} siteName={s.site_name} />}
-        {visible('services') && <Services data={sec('services')} items={list('services')} onEnquire={enquire} />}
-        {visible('equipment') && <Equipment data={sec('equipment')} onEnquire={enquire} />}
+        {visible('services') && <Services data={sec('services')} items={list('services')} onEnquire={enquire('services')} />}
+        {visible('equipment') && <Equipment data={sec('equipment')} onEnquire={enquire('equipment')} />}
         {visible('panel_feature') && <PanelFeature data={sec('panel_feature')} />}
         {visible('why') && <WhyChooseUs data={sec('why')} items={list('why_items')} />}
-        {visible('projects') && <Projects data={sec('projects')} items={list('projects')} onEnquire={enquire} />}
+        {visible('projects') && <Projects data={sec('projects')} items={list('projects')} onEnquire={enquire('projects')} />}
         {visible('process') && <Process data={sec('process')} items={list('process_steps')} />}
         {visible('testimonials') && <Testimonials data={sec('testimonials')} items={list('testimonials')} />}
         {visible('cta') && <CTA data={sec('cta')} settings={s} />}
