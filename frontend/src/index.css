@@ -799,3 +799,4 @@ button { font-family: inherit; }
 /* **bold** words typed in the admin (keywords bolded in the SEO document) */
 .rt-b { font-weight: 700; color: inherit; }
 .about__lead + .about__lead { margin-top: 14px; }
+.form-success .btn { margin: 5px; }

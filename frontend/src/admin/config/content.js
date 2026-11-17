@@ -215,6 +215,9 @@ export const PAGES = {
         { name: 'voltage_options', label: 'Voltage requirement options', type: 'list', addLabel: 'Add option' },
         { name: 'equipment_options', label: 'Equipment requirement options', type: 'list', addLabel: 'Add option' },
         { name: 'success_message', label: 'Message shown after sending', type: 'textarea', rows: 2 },
+        { name: 'whatsapp_heading', label: 'WhatsApp message heading', half: true, placeholder: 'New Project Enquiry – ARUL ELECTRICAL' },
+        { name: 'whatsapp_button', label: '“Send on WhatsApp” button text', half: true, placeholder: 'Send on WhatsApp' },
+        { name: 'whatsapp_success', label: 'Message shown when WhatsApp opens', type: 'textarea', rows: 2, help: 'Shown after submitting when enquiries go to WhatsApp.' },
       ] },
       { title: 'Contact card labels', icon: 'list', fields: [
         { name: 'address_label', label: 'Address card title', half: true },
@@ -299,6 +302,8 @@ export const SETTINGS_PAGE = {
       { name: 'show_call_button', label: 'Show floating Call button', type: 'toggle', half: true },
       { name: 'show_whatsapp_button', label: 'Show floating WhatsApp button', type: 'toggle', half: true },
       { name: 'whatsapp', label: 'WhatsApp number', half: true, help: 'Country code + number, digits only — e.g. 917550343138.' },
+      { name: 'enquiry_via_whatsapp', label: 'Send website enquiries to WhatsApp', type: 'toggle', half: true, help: 'After a visitor submits the enquiry form, WhatsApp opens with their details filled in; they tap Send. Enquiries are still saved under Enquiries.' },
+      { name: 'enquiry_whatsapp', label: 'Enquiry WhatsApp number', half: true, help: 'Number that receives form enquiries. Country code + number, digits only — e.g. 916385429159. Leave empty to use the WhatsApp number above.' },
       { name: 'whatsapp_message', label: 'Ready-made WhatsApp message', type: 'textarea', rows: 3, help: 'This text is pre-filled when a visitor taps the WhatsApp button.' },
     ] },
     { title: 'Map', icon: 'map-pin', fields: [

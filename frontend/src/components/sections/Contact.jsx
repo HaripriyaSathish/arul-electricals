@@ -3,14 +3,33 @@ import Icon from '../common/Icon'
 import { rich } from '../common/SiteBits'
 import { PublicAPI } from '../../api/endpoints'
 import { errorMessage, fieldErrors } from '../../api/axiosInstance'
-import { telHref } from '../../utils/helpers'
+import { telHref, whatsappHref } from '../../utils/helpers'
 
 const EMPTY = { name: '', company: '', phone: '', email: '', voltage: '', equipment: '', location: '', message: '', website: '' }
 
 export default function Contact({ data: d, settings: s, preset }) {
   const [form, setForm] = useState(EMPTY)
   const [errors, setErrors] = useState({})
-  const [status, setStatus] = useState({ state: 'idle', message: '' })
+  const [status, setStatus] = useState({ state: 'idle', message: '', waLink: '' })
+
+  // Enquiries go to WhatsApp: number from Admin → Site Settings → Call & WhatsApp (falls back to the main WhatsApp number)
+  const waNumber = String(s.enquiry_whatsapp || s.whatsapp || '').replace(/\D/g, '')
+  const viaWhatsApp = s.enquiry_via_whatsapp !== false && !!waNumber
+
+  /** The enquiry as a ready-to-send WhatsApp message (only filled-in fields). */
+  const whatsappText = (f) => [
+    `*${d.whatsapp_heading || `New Project Enquiry – ${s.site_name || 'Website'}`}*`,
+    '',
+    [d.label_name || 'Full Name', f.name],
+    [d.label_company || 'Company / Organization', f.company],
+    [d.label_phone || 'Mobile Number', f.phone],
+    [d.label_email || 'Email Address', f.email],
+    [d.label_voltage || 'Voltage Requirement', f.voltage],
+    [d.label_equipment || 'Equipment Requirement', f.equipment],
+    [d.label_location || 'Project Site Location', f.location],
+    [d.label_message || 'Project Scope / Technical Requirements', f.message],
+  ].map((row) => (Array.isArray(row) ? (String(row[1] || '').trim() ? `*${row[0]}:* ${String(row[1]).trim()}` : null) : row))
+    .filter((row) => row !== null).join('\n')
 
   // "Enquire Now" on a service/project pre-fills the requirement
   useEffect(() => {
@@ -51,14 +70,19 @@ export default function Contact({ data: d, settings: s, preset }) {
   const submit = async (e) => {
     e.preventDefault()
     if (!validate()) return
-    setStatus({ state: 'sending', message: '' })
+    // Open WhatsApp right away, inside the click — browsers block pop-ups opened after waiting for the server
+    const waLink = viaWhatsApp && !form.website ? whatsappHref(waNumber, whatsappText(form)) : ''
+    if (waLink) window.open(waLink, '_blank', 'noopener')
+    setStatus({ state: 'sending', message: '', waLink: '' })
     try {
+      // still saved in Admin → Enquiries (and emailed if SMTP is set up), so nothing is lost if WhatsApp is not sent
       const res = await PublicAPI.contact(form)
-      setStatus({ state: 'sent', message: d.success_message || res.message })
+      const message = waLink ? (d.whatsapp_success || 'WhatsApp has opened with your enquiry. Tap Send in WhatsApp to deliver it to our engineering team.') : (d.success_message || res.message)
+      setStatus({ state: 'sent', message, waLink })
       setForm(EMPTY)
     } catch (err) {
       setErrors(fieldErrors(err))
-      setStatus({ state: 'error', message: errorMessage(err, 'Could not send your enquiry. Please call us instead.') })
+      setStatus({ state: 'error', message: errorMessage(err, 'Could not send your enquiry. Please call us instead.'), waLink: '' })
     }
   }
 
@@ -121,7 +145,12 @@ export default function Contact({ data: d, settings: s, preset }) {
               <span><Icon name="check" size={34} strokeWidth={3} /></span>
               <h3>{d.success_title || 'Enquiry sent!'}</h3>
               <p>{status.message}</p>
-              <button type="button" className="btn btn--soft" onClick={() => setStatus({ state: 'idle', message: '' })}>{d.again_text || 'Send another enquiry'}</button>
+              {status.waLink && (
+                <a className="btn btn--whatsapp" href={status.waLink} target="_blank" rel="noopener noreferrer">
+                  <Icon name="whatsapp" size={18} />{d.whatsapp_button || 'Send on WhatsApp'}
+                </a>
+              )}
+              <button type="button" className="btn btn--soft" onClick={() => setStatus({ state: 'idle', message: '', waLink: '' })}>{d.again_text || 'Send another enquiry'}</button>
             </div>
           ) : (
             <form onSubmit={submit} noValidate>
@@ -140,7 +169,7 @@ export default function Contact({ data: d, settings: s, preset }) {
               </div>
               {status.state === 'error' && <div className="form-error"><Icon name="alert" size={16} />{status.message}</div>}
               <button type="submit" className="btn btn--primary btn--lg btn--block" disabled={status.state === 'sending'}>
-                {status.state === 'sending' ? <><span className="btn-spinner" />Sending…</> : <>{d.submit_text || 'Submit Enquiry'}<Icon name="arrow-right" size={18} /></>}
+                {status.state === 'sending' ? <><span className="btn-spinner" />Sending…</> : <>{viaWhatsApp && <Icon name="whatsapp" size={18} />}{d.submit_text || 'Submit Enquiry'}<Icon name="arrow-right" size={18} /></>}
               </button>
               <p className="form-card__note"><Icon name="lock" size={13} />{d.privacy_note}</p>
             </form>
