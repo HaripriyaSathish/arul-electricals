@@ -5,6 +5,8 @@
  *   Local MySQL:  php database/apply_seo_content.php
  *   Neon (Render): DATABASE_URL='postgresql://...' php -d extension=pdo_pgsql database/apply_seo_content.php
  *
+ *   Only some sections: add --only=legal (comma-separated section keys, e.g. --only=legal,faq).
+ *
  * Safe to run more than once. It only changes the fields listed below (other admin edits are kept).
  * Contact details (address, phone, email, working hours) are NOT changed — edit them in Admin → Site Settings.
  */
@@ -211,7 +213,103 @@ $sections = [
         'equipment_options' => ['Transformer Installation', 'HT Panel / Switchgear', 'PCC / MCC Panel', 'APFC Panel', 'DG Set / Generator Synchronization', 'HT/LT Cable Laying', 'Cable Tray Installation', 'Rule 45 & Rule 32 Approvals', 'Other'],
         'submit_text'       => 'Submit Project Enquiry',
     ],
+    // Footer pop-ups. Wording follows the SEO document's service names. Formatting: "## " heading, "- " bullet, blank line = paragraph.
+    'legal' => [
+        'privacy_title' => 'Privacy Policy',
+        'privacy' => <<<'TXT'
+Last updated: November 2026
+
+ARUL ELECTRICAL ("we", "us", "our") is an A-Grade government licensed electrical contractor and consultant providing industrial electrical contracting and electrical engineering consultancy services in Tamil Nadu. This policy explains what information we collect through this website and how we use it.
+
+## Information we collect
+- Details you enter in the Project Technical Assessment Form: full name, company / organization, mobile contact, email address, voltage requirement, equipment requirement, project site location and project scope & technical requirements.
+- Project information you share with our engineers by phone, WhatsApp or email, such as sanctioned load in kVA, single-line diagrams, electrical drawings, tender documents and BOQ submissions.
+- Basic technical data such as your IP address, used only to protect the website from spam and misuse.
+
+## How we use your information
+- To respond to your enquiry and prepare technical estimates for HT and LT electrical installation, new HT connections, panel board manufacturing, transformer, HT panel and DG set supply and installation, HT/LT cable laying and cable tray installation.
+- To schedule site inspections and technical audits, and to deliver our electrical contracting and electrical engineering consultancy services.
+- To prepare statutory documentation, such as Rule 45 and Rule 32 submissions and CEIG approval drawings, when you engage us to do so.
+- To contact you by phone, WhatsApp or email about your project.
+- We do not sell, rent or trade your personal information to anyone.
+
+## Sharing
+Information is shared only with our engineering team and, where your project requires it, with statutory authorities such as the Electrical Inspectorate (CEIG) and the electricity distribution company (DISCOM) for approvals you have asked us to obtain, or with equipment manufacturers when supplying transformers, HT switchgear, panels or DG sets you have ordered.
+
+## Data security & retention
+Enquiries are stored securely and kept only as long as needed for your project, our records and legal obligations.
+
+## Third-party services
+This website shows a Google Map and links to WhatsApp. These services have their own privacy policies.
+
+## Your choices
+You may ask us to view, correct or delete your details at any time by contacting us using the details on this website.
+TXT,
+        'terms_title' => 'Terms of Service',
+        'terms' => <<<'TXT'
+Last updated: November 2026
+
+By using this website you agree to the following terms.
+
+## Our services
+ARUL ELECTRICAL is an A-Grade licensed electrical contractor and consultant. We provide HT and LT electrical installation, new HT connection installation with documentation, panel board manufacturing (PCC, MCC, APFC, AMF and generator synchronization panels), Rule 45 and Rule 32 documentation and CEIG approvals, HT/LT cable laying, cable tray installation, transformer, HT panel and DG set sales and installation, and electrical engineering consultancy for industrial and commercial facilities.
+
+## Website content
+The information on this website is provided for general information about our electrical contracting, power equipment supply and consultancy services. While we take care to keep it accurate, it does not form a binding offer. Project descriptions and equipment ratings and capacities shown on this website are indicative.
+
+## Enquiries, quotations & work orders
+- Enquiries submitted through the Project Technical Assessment Form are not orders. All work is carried out only on the basis of a written quotation or work order agreed with the client.
+- Technical specifications, timelines and prices are confirmed after site inspection and are subject to statutory approvals, site conditions and equipment availability.
+- Statutory approval timelines, including CEIG and DISCOM approvals, depend on the respective authorities and are outside our control.
+
+## Equipment supply
+Transformers, HT switchgear, panel boards and DG sets are supplied as specified in the agreed quotation. Warranty terms for supplied equipment are as stated in that quotation.
+
+## Images
+Some photographs on this website are illustrative and may not show actual client sites.
+
+## Intellectual property
+The text, logo, design and images on this website belong to ARUL ELECTRICAL or are used with permission and may not be copied without consent.
+
+## Limitation of liability
+ARUL ELECTRICAL is not liable for any loss arising from the use of information on this website. Electrical work must always be carried out by licensed professionals.
+
+## Governing law
+These terms are governed by the laws of India. Courts at Hosur / Krishnagiri, Tamil Nadu shall have jurisdiction.
+TXT,
+        'statutory_title' => 'Statutory Approvals',
+        'statutory' => <<<'TXT'
+ARUL ELECTRICAL is an A-Grade government licensed electrical contractor and consultant. Every HT and LT electrical installation we execute is designed, tested and documented to meet Indian statutory requirements, Central Electricity Authority (CEA) regulations and DISCOM requirements.
+
+## Licensing
+- A-Grade Electrical Contractor licence issued by the Electrical Licensing Board, Government of Tamil Nadu.
+- Class 1 electrical contractor for HT and LT electrical works.
+- Work supervised by certified electrical supervisors and carried out by licensed wiremen.
+- Licence details are available on request.
+
+## Regulations we comply with
+- Central Electricity Authority (Measures relating to Safety and Electric Supply) Regulations.
+- Indian Electricity Rules — including Rule 45 (licensed contractor execution) and Rule 32 (identification of earthed and neutral conductors).
+- DISCOM requirements for HT service connections and load enhancement.
+- Relevant IS / IEC standards for switchgear, transformers, cables and earthing, with CPRI type-tested designs for panel boards.
+
+## Approvals we handle for clients
+- CEIG approval drawings and safety inspection for HT installations, substations and switchyards.
+- New HT service connection and load enhancement with the electricity distribution company (TANGEDCO / TNPDCL).
+- Rule 45 & Rule 32 documentation, test reports and completion certificates.
+- Transformer, HT panel and DG set energisation approvals, including generator synchronization.
+- Final electrical safety fitness clearance.
+
+## Testing & documentation
+Insulation resistance (Megger), earth resistance, BDV oil testing, relay and secondary injection testing and Hi-Pot tests are carried out with calibrated instruments and handed over with the completion documents.
+TXT,
+    ],
 ];
+
+// --only=key1,key2 limits the run to those sections (cards and media are skipped)
+$only = null;
+foreach ($argv as $a) if (str_starts_with($a, '--only=')) $only = array_filter(explode(',', substr($a, 7)));
+if ($only) $sections = array_intersect_key($sections, array_flip($only));
 
 $get = $pdo->prepare('SELECT data FROM sections WHERE section_key = ?');
 $upd = $pdo->prepare('UPDATE sections SET data = ? WHERE section_key = ?');
@@ -228,6 +326,8 @@ foreach ($sections as $key => $values) {
         say("  section $key: added");
     }
 }
+
+if ($only) { say('Done (only: ' . implode(', ', $only) . ').'); exit; }
 
 // ---------- repeatable cards (matched by their order on the website) ----------
 $cards = [
