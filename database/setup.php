@@ -467,9 +467,10 @@ $seed('projects', [
 $seed('process_steps', [
     ['title' => 'Requirement Discussion', 'phase' => 'Intake', 'icon' => 'users', 'description' => 'Understand project requirements, electrical loads and technical expectations.'],
     ['title' => 'Site Inspection', 'phase' => 'Survey', 'icon' => 'search', 'description' => 'Evaluate the site, existing infrastructure and installation requirements.'],
-    ['title' => 'Technical Planning & Documentation', 'phase' => 'Engineering', 'icon' => 'compass', 'description' => 'Prepare layouts, electrical planning, technical documentation and approval submissions.'],
+    ['title' => 'Technical Planning', 'phase' => 'Engineering', 'icon' => 'compass', 'description' => 'Prepare technical layouts, electrical planning and project execution strategy.'],
+    ['title' => 'Documentation & Approvals', 'phase' => 'Statutory', 'icon' => 'clipboard-check', 'description' => 'Coordinate applicable technical documentation and approval requirements.'],
     ['title' => 'Installation & Execution', 'phase' => 'Build', 'icon' => 'wrench', 'description' => 'Execute HT/LT installation, cable infrastructure, equipment and panel-related work.'],
-    ['title' => 'Testing & Handover', 'phase' => 'Commissioning', 'icon' => 'check-circle', 'description' => 'Complete applicable inspections, testing and project handover.'],
+    ['title' => 'Testing & Handover', 'phase' => 'Commissioning', 'icon' => 'shield-check', 'description' => 'Complete applicable inspections, testing and project handover.'],
 ]);
 
 say('Done. Start the API with:  php -d extension=gd -S localhost:8000 -t backend/uploads backend/index.php');

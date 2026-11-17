@@ -127,7 +127,7 @@ export const PAGES = {
 
   process: {
     path: 'process', title: 'Our Workflow', icon: 'workflow', anchor: 'process', sectionKey: 'process',
-    description: 'The step-by-step timeline (recommended: five steps).',
+    description: 'The step-by-step timeline (recommended: six steps).',
     collection: 'process_steps', headingFields: [...HEADING, { name: 'phase_label', label: 'Word before the phase name', half: true, placeholder: 'Phase' }],
   },
 
